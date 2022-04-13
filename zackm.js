@@ -105,11 +105,128 @@ let msg = {
 mans.ev.emit('messages.upsert', msg)
 }
 
-const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, sticker, smeme, owner`
+const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, getpic, getname, sticker, smeme, toimage, tomp4, toaudio, tomp3, tovn, togif, tourl, quoted, owner`
+const qtod = m.quoted? "true":"false"
 // Case Nye Sini Ngab
 switch(command) {
 case 'menu': {
 mans.sendMessage(from, {text:listmn}, {quoted:m})
+}
+break
+case 'toimage': case 'toimg': {
+if (!m.quoted) return m.reply('Reply Image')
+if (!/webp/.test(mime)) return m.reply(`balas stiker dengan caption *${prefix + command}*`)
+m.reply(mess.wait)
+let media = await mans.downloadAndSaveMediaMessage(quoted)
+let ran = await getRandom('.png')
+exec(`ffmpeg -i ${media} ${ran}`, (err) => {
+fs.unlinkSync(media)
+if (err) throw err
+let buffer = fs.readFileSync(ran)
+mans.sendMessage(m.chat, { image: buffer }, { quoted: m })
+fs.unlinkSync(ran)
+})
+}
+break
+case 'tomp4': case 'tovideo': {
+if (!m.quoted) return m.reply('Reply Image')
+if (!/webp/.test(mime)) return m.reply(`balas stiker dengan caption *${prefix + command}*`)
+m.reply(mess.wait)
+let { webp2mp4File } = require('./lib/uploader')
+let media = await mans.downloadAndSaveMediaMessage(quoted)
+let webpToMp4 = await webp2mp4File(media)
+await mans.sendMessage(m.chat, { video: { url: webpToMp4.result, caption: 'Convert Webp To Video' } }, { quoted: m })
+await fs.unlinkSync(media)
+}
+break
+case 'toaud': case 'toaudio': {
+if (!/video/.test(mime) && !/audio/.test(mime)) return m.reply(`Kirim/Reply Video/Audio Yang Ingin Dijadikan Audio Dengan Caption ${prefix + command}`)
+if (!m.quoted) return m.reply(`Kirim/Reply Video/Audio Yang Ingin Dijadikan Audio Dengan Caption ${prefix + command}`)
+m.reply(mess.wait)
+let media = await quoted.download()
+let { toAudio } = require('./lib/converter')
+let audio = await toAudio(media, 'mp4')
+mans.sendMessage(m.chat, {audio: audio, mimetype: 'audio/mpeg'}, { quoted : m })
+}
+break
+case 'tomp3': {
+if (/document/.test(mime)) return m.reply(`Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`)
+if (!/video/.test(mime) && !/audio/.test(mime)) return m.reply(`Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`)
+if (!m.quoted) return m.reply(`Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`)
+m.reply(mess.wait)
+let media = await quoted.download()
+let { toAudio } = require('./lib/converter')
+let audio = await toAudio(media, 'mp4')
+mans.sendMessage(m.chat, {document: audio, mimetype: 'audio/mpeg', fileName: `Convert By ${mans.user.name} (${m.id}).mp3`}, { quoted : m })
+}
+break
+case 'tovn': case 'toptt': {
+if (!/video/.test(mime) && !/audio/.test(mime)) return m.reply(`Reply Video/Audio Yang Ingin Dijadikan VN Dengan Caption ${prefix + command}`)
+if (!m.quoted) return m.reply(`Reply Video/Audio Yang Ingin Dijadikan VN Dengan Caption ${prefix + command}`)
+m.reply(mess.wait)
+let media = await quoted.download()
+let { toPTT } = require('./lib/converter')
+let audio = await toPTT(media, 'mp4')
+mans.sendMessage(m.chat, {audio: audio, mimetype:'audio/mpeg', ptt:true }, {quoted:m})
+}
+break
+case 'togif': {
+if (!m.quoted) return m.reply('Reply Image')
+if (!/webp/.test(mime)) return m.reply(`balas stiker dengan caption *${prefix + command}*`)
+m.reply(mess.wait)
+let { webp2mp4File } = require('./lib/uploader')
+let media = await mans.downloadAndSaveMediaMessage(quoted)
+let webpToMp4 = await webp2mp4File(media)
+await mans.sendMessage(m.chat, { video: { url: webpToMp4.result, caption: 'Convert Webp To Video' }, gifPlayback: true }, { quoted: m })
+await fs.unlinkSync(media)
+}
+break
+case 'tourl': {
+m.reply(mess.wait)
+let { UploadFileUgu, webp2mp4File, TelegraPh } = require('./lib/uploader')
+let media = await mans.downloadAndSaveMediaMessage(quoted)
+if (/image/.test(mime)) {
+let anu = await TelegraPh(media)
+m.reply(util.format(anu))
+} else if (!/image/.test(mime)) {
+let anu = await UploadFileUgu(media)
+m.reply(util.format(anu))
+}
+await fs.unlinkSync(media)
+}
+break
+case 'q': case 'quoted': {
+if (!m.quoted) return m.reply('Reply Pesannya!!')
+let wokwol = await mans.serializeM(await m.getQuotedObj())
+if (!wokwol.quoted) return m.reply('Pesan Yang anda reply tidak mengandung reply')
+await wokwol.quoted.copyNForward(m.chat, true)
+}
+break
+case 'getname': {
+if (qtod === "true") {
+namenye = await mans.getName(m.quoted.sender)
+m.reply(namenye)
+} else if (qtod === "false") {
+mans.sendMessage(from, {text:"Reply orangnya"}, {quoted:fvn})
+}
+}
+break
+case 'getpic': {
+if (qtod === "true") {
+try {
+pporg = await mans.profilePictureUrl(m.quoted.sender, 'image')
+} catch {
+pporg = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
+}
+mans.sendMessage(m.chat, { image : { url : pporg }, caption:`Done` }, { quoted : m })
+} else if (qtod === "false") {
+try {
+pporgs = await mans.profilePictureUrl(from, 'image')
+} catch {
+pporgs = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
+}
+mans.sendMessage(m.chat, { image : { url : pporgs }, caption:`Done` }, { quoted : m })
+}
 }
 break
 case 'owner': case 'creator': {
@@ -134,10 +251,11 @@ let buttons = [
 ]
 let buttonMessage = {
 image: { url: images },
-caption: `*-------「 GIMAGE SEARCH 」-------*
-🤠 *Query* : ${text}
-🔗 *Media Url* : ${images}`,
-footer: mans.user.name,
+caption: `*| GOOGLE IMAGE |*
+
+🤠 Query : ${text}
+🔗 Media Url : ${images}`,
+footer: "© MyMans APIs - MyMainas",
 buttons: buttons,
 headerType: 4
 }
