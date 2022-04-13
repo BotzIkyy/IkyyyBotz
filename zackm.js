@@ -105,11 +105,58 @@ let msg = {
 mans.ev.emit('messages.upsert', msg)
 }
 
-const listmn = `tiktok, youtube, instagram, pinterest, mp4, jpeg, sticker, smeme`
+const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, sticker, smeme, owner`
 // Case Nye Sini Ngab
 switch(command) {
 case 'menu': {
 mans.sendMessage(from, {text:listmn}, {quoted:m})
+}
+break
+case 'owner': case 'creator': {
+mans.sendContact(m.chat, global.owner, m)
+}
+break
+case 'translate': case 'terjemahan': {
+if (!args.join(" ")) return m.reply("Textnya?")
+tes = await fetchJson (`https://megayaa.herokuapp.com/api/translate?to=id&kata=${args.join(" ")}`)
+Infoo = tes.info
+Detek = tes.translate
+m.reply(`🌐Translate : ${Detek}\n📘Hasil : ${Infoo}`)
+}
+break
+case 'gimage': case 'gig': {
+let gis = require('g-i-s')
+gis(args.join(" "), async (error, result) => {
+n = result
+images = n[Math.floor(Math.random() * n.length)].url
+let buttons = [
+{buttonId: `gimage ${args.join(" ")}`, buttonText: {displayText: 'Next Image'}, type: 1}
+]
+let buttonMessage = {
+image: { url: images },
+caption: `*-------「 GIMAGE SEARCH 」-------*
+🤠 *Query* : ${text}
+🔗 *Media Url* : ${images}`,
+footer: mans.user.name,
+buttons: buttons,
+headerType: 4
+}
+mans.sendMessage(m.chat, buttonMessage, { quoted: m })
+})
+}
+break
+case 'google': {
+if (!args[0]) return m.reply(`Example: ${prefix + command} <query>\nUses : ${prefix + command} apa arti cinta`)
+let google = require('google-it')
+google({'query': args.join(" ")}).then(res => {
+let teks = `Google Search From : ${text}\n\n`
+for (let g of res) {
+teks += `⭔ *Title* : ${g.title}\n`
+teks += `⭔ *Description* : ${g.snippet}\n`
+teks += `⭔ *Link* : ${g.link}\n\n────────────────────────\n\n`
+} 
+m.reply(teks)
+})
 }
 break
 case 'pinterest': case 'image': {
@@ -228,7 +275,8 @@ let buttons = [
 ]
 let buttonMessage = {
 image: { url: anu.thumbnail },
-caption: `
+caption: `*| YOUTUBE PLAY |*
+
 ⭔ Title : ${anu.title}
 ⭔ Ext : Search
 ⭔ ID : ${anu.videoId}
