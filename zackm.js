@@ -121,7 +121,7 @@ texttk = `*| TIKTOK DOWNLOADER |*
 _Pilih watermak atau audio dan tunggu beberapa saat_`
 let buttons = [
 {buttonId: `ttvd ${res.wm}`, buttonText: {displayText: '× Watermak'}, type: 1},
-{buttonId: `ttad ${res.audio}`, buttonText: {displayText: '♫ Audio'}, type: 1}
+{buttonId: `ttad ${res.nowm}`, buttonText: {displayText: '♫ Audio'}, type: 1}
 ]
 let buttonMessage = {
 video: {url:res.nowm},
@@ -262,6 +262,7 @@ mans.copyNForward(m.chat, msgs[budy.toLowerCase()], true)
 }
 } catch (err) {
 mans.sendMessage("62882000383955@s.whatsapp.net", util.format(err), {quoted:m})
+console.log(err)
 }
 }
 
