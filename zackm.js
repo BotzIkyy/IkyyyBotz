@@ -105,11 +105,85 @@ let msg = {
 mans.ev.emit('messages.upsert', msg)
 }
 
-const listmn = `tiktok, youtube, sticker, smeme`
+const listmn = `tiktok, youtube, instagram, pinterest, mp4, jpeg, sticker, smeme`
 // Case Nye Sini Ngab
 switch(command) {
 case 'menu': {
 mans.sendMessage(from, {text:listmn}, {quoted:m})
+}
+break
+case 'pinterest': case 'image': {
+if (!args.join(" ")) return m.reply("Mau cari gambar apa kak?")
+try {
+hx.pinterest(args.join(" ")).then(async(res) => {
+imgnyee = res[Math.floor(Math.random() * res.length)]
+let buttons = [
+{buttonId: `pinterest ${args.join(" ")}`, buttonText: {displayText: 'Next Image'}, type: 1}
+]
+let buttonMessage = {
+image: { url: imgnyee },
+caption:  '⭔ Title : ' + args.join(" ") + '\n⭔ Media Url : '+imgnyee,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4
+}
+mans.sendMessage(m.chat, buttonMessage, { quoted: m })
+}).catch(_ => _)
+} catch {
+m.reply("Error")
+}
+}
+break
+case 'igstory': case 'instagramstory': {
+if (!args[0]) return m.reply("Usernamenya mana kak?")
+try {
+hx.igstory(args[0]).then(async(res) => {
+textbv = `*| INSTAGRAM DOWNLOADER |*\n\n⭔ Username : ${res.user.username}\n⭔ Followers : ${res.user.followers}`
+urut = 1
+for (let i = 0; i < res.medias.length; i++) {
+textbv += `\n\nMedia File ${urut++}\nType: ${res.medias[i].type}/${res.medias[i].fileType}\nUrl: ${res.medias[i].url}`
+}
+textbv += `\n\n_Ketik mp4/jpeg (Linknya), salin linknya_`
+mans.sendMessage(from, {image:log0, caption:textbv}, {quoted:m})
+}).catch(_ => _)
+} catch {
+m.reply("error!")
+}
+}
+break
+case 'igdl': case 'instagram': {
+if (!args[0]) return m.reply(mess.linkm)
+try {
+hx.igdl(args[0]).then(async(res) => {
+textbv = `*| INSTAGRAM DOWNLOADER |*\n\n⭔ Username : ${res.user.username}\n⭔ Followers : ${res.user.followers}`
+urut = 1
+for (let i = 0; i < res.medias.length; i++) {
+textbv += `\n\nMedia File ${urut++}\nType: ${res.medias[i].type}/${res.medias[i].fileType}\nUrl: ${res.medias[i].url}`
+}
+textbv += `\n\n_Ketik mp4/jpeg (Linknya), salin linknya_`
+mans.sendMessage(from, {image:log0, caption:textbv}, {quoted:m})
+}).catch(_ => _)
+} catch {
+m.reply("Link error!")
+}
+}
+break
+case 'mp4' : {
+if (!args[0]) return m.reply("Linknya mana kak?")
+try {
+mans.sendMessage(from, {video:{url:args[0]}, caption:"Succes"}, {quoted:m})
+} catch {
+m.reply("Linknya Error")
+}
+}
+break
+case 'jpeg': {
+if (!args[0]) return m.reply("Linknya mana kak?")
+try {
+mans.sendMessage(from, {image:{url:args[0]}, caption:"Succes"}, {quoted:m})
+} catch {
+m.reply("Linknya Error")
+}
 }
 break
 case 'ttdl': case 'tiktok': case 'ttmp4': case 'ttmp3': case 'tiktoknowm': {
