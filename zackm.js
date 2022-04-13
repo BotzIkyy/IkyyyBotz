@@ -219,6 +219,33 @@ case 'ttad': {
 mans.sendMessage(from, {audio:{url:args[0]}, mimetype:"audio/mp4", ptt:true}, {quoted:m})
 }
 break
+case 'play': case 'ytplay': {
+let yts = require("yt-search")
+let search = await yts(text)
+let anu = search.videos[Math.floor(Math.random() * search.videos.length)]
+let buttons = [
+{buttonId: `ytdl ${anu.url}`, buttonText: {displayText: 'Download'}, type: 1}
+]
+let buttonMessage = {
+image: { url: anu.thumbnail },
+caption: `
+⭔ Title : ${anu.title}
+⭔ Ext : Search
+⭔ ID : ${anu.videoId}
+⭔ Duration : ${anu.timestamp}
+⭔ Viewers : ${anu.views}
+⭔ Upload At : ${anu.ago}
+⭔ Author : ${anu.author.name}
+⭔ Channel : ${anu.author.url}
+⭔ Description : ${anu.description}
+⭔ Url : ${anu.url}`,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4
+}
+mans.sendMessage(m.chat, buttonMessage, { quoted: m })
+}
+break
 case 'ytdl': case 'yt': case 'youtube': case 'ytmp4': case 'ytmp3': {
 if (!args[0]) return m.reply(mess.linkm)
 try {
