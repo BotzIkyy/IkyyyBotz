@@ -76,6 +76,19 @@ const groupOwner = m.isGroup ? groupMetadata.owner : ''
 const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
 const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
 
+// Quoted
+		const isQuotedImage = m.mtype === 'extendedTextMessage' && content.includes('imageMessage')
+		const isQuotedVideo = m.mtype === 'extendedTextMessage' && content.includes('videoMessage')
+		const isQuotedAudio = m.mtype === 'extendedTextMessage' && content.includes('audioMessage')
+		const isQuotedSticker = m.mtype === 'extendedTextMessage' && content.includes('stickerMessage')
+		const isQuotedLoca = m.mtype === 'extendedTextMessage' && content.includes('locationMessage')
+        const isQuotedContact = m.mtype === 'extendedTextMessage' && content.includes('contactMessage')
+        const isQuotedDocs = m.mtype === 'extendedTextMessage' && content.includes('documentMessage')
+        const isQuotedTeks = m.mtype === 'extendedTextMessage' && content.includes('quotedMessage')
+        const isQuotedTag = m.mtype === 'extendedTextMessage' && content.includes('mentionedJid')
+        const isQuotedProd = m.mtype === 'extendedTextMessage' && content.includes('productMessage')
+        const isQuotedReply = m.mtype === 'extendedTextMessage' && content.includes('Message')
+
 // Public & Self
 if (!mans.public) {
 if (!m.key.fromMe) return
@@ -106,12 +119,92 @@ let msg = {
 mans.ev.emit('messages.upsert', msg)
 }
 
-const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, getpic, getname, sticker, smeme, toimage, tomp4, toaudio, tomp3, tovn, togif, tourl, nulis, kalkulator, quoted, ping, self, public, owner`
+const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, getpic, getname, sticker, smeme, toimage, tomp4, toaudio, tomp3, tovn, togif, tourl, nulis, kalkulator, quoted, volume, bass, tempo, ping, self, public, owner`
 const qtod = m.quoted? "true":"false"
 // Case Nye Sini Ngab
 switch(command) {
 case 'menu': {
 mans.sendMessage(from, {text:listmn}, {quoted:m})
+}
+break
+case 'volume': {
+if (!args.join(" ")) return m.reply(`Example: ${prefix + command} 10`)
+media = await mans.downloadAndSaveMediaMessage(quoted, "volume")
+if (isQuotedAudio) {
+rname = getRandom('.mp3')
+exec(`ffmpeg -i ${media} -filter:a volume=${args[0]} ${rname}`, (err, stderr, stdout) => {
+fs.unlinkSync(media)
+if (err) return m.reply('Error!')
+jadie = fs.readFileSync(rname)
+mans.sendMessage(from, {audio:jadie, mimetype: 'audio/mp4', ptt: true}, {quoted: m})
+fs.unlinkSync(rname)
+})
+} else if (isQuotedVideo) {
+rname = getRandom('.mp4')
+exec(`ffmpeg -i ${media} -filter:a volume=${args[0]} ${rname}`, (err, stderr, stdout) => {
+fs.unlinkSync(media)
+if (err) return m.reply('Error!')
+jadie = fs.readFileSync(rname)
+mans.sendMessage(from, {video:jadie, mimetype: 'video/mp4'}, {quoted: m})
+fs.unlinkSync(rname)
+})
+} else {
+m.reply("Kirim video/audio")
+}
+}
+break
+case 'tempo': {
+if (!args.join(" ")) return m.reply(`Example: ${prefix + command} 10`)
+var req = args.join(' ')
+media = await mans.downloadAndSaveMediaMessage(quoted, "tempo")
+if (isQuotedAudio) {
+ran = getRandom('.mp3')
+exec(`ffmpeg -i ${media} -filter:a "atempo=1.0,asetrate=${req}" ${ran}`, (err, stderr, stdout) => {
+fs.unlinkSync(media)
+if (err) return m.reply('Error!')
+hah = fs.readFileSync(ran)
+mans.sendMessage(from, {audio:hah, mimetype:'audio/mp4', ptt:true}, {quoted:m})
+fs.unlinkSync(ran)
+})
+} else if (isQuotedVideo) {
+ran = getRandom('.mp4')
+exec(`ffmpeg -i ${media} -filter:a "atempo=1.0,asetrate=${req}" ${ran}`, (err, stderr, stdout) => {
+fs.unlinkSync(media)
+if (err) return m.reply('Error!')
+hah = fs.readFileSync(ran)
+mans.sendMessage(from, {video:hah, mimetype:'video/mp4'}, {quoted:m})
+fs.unlinkSync(ran)
+})
+} else {
+m.reply("Kirim video/audio")
+}
+}
+break
+case 'bass': {
+if (!args.join(" ")) return m.reply(`Example: ${prefix + command} 10`)
+var req = args.join(' ')
+media = await mans.downloadAndSaveMediaMessage(quoted, "bass")
+if (isQuotedAudio) {
+ran = getRandom('.mp3')
+exec(`ffmpeg -i ${media} -af equalizer=f=${req}:width_type=o:width=2:g=20 ${ran}`, (err, stderr, stdout) => {
+fs.unlinkSync(media)
+if (err) return m.reply('Error!')
+hah = fs.readFileSync(ran)
+mans.sendMessage(from, {audio:hah, mimetype: 'audio/mp4', ptt:true}, {quoted: m})
+fs.unlinkSync(ran)
+})
+} else if (isQuotedVideo) {
+ran = getRandom('.mp4')
+exec(`ffmpeg -i ${media} -af equalizer=f=${req}:width_type=o:width=2:g=20 ${ran}`, (err, stderr, stdout) => {
+fs.unlinkSync(media)
+if (err) return m.reply('Error!')
+hah = fs.readFileSync(ran)
+mans.sendMessage(from, {video:hah, mimetype: 'video/mp4'}, {quoted: m})
+fs.unlinkSync(ran)
+})
+} else {
+m.reply("Kirim video/audio")
+}
 }
 break
 case 'nulis': {
