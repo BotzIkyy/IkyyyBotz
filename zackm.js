@@ -18,6 +18,7 @@ const moment = require('moment-timezone')
 const { JSDOM } = require('jsdom')
 const speed = require('performance-now')
 const hx = require("hxz-api")
+const mathjs = require('mathjs')
 const { performance } = require('perf_hooks')
 const { Primbon } = require('scrape-primbon')
 const imgbbUploader = require('imgbb-uploader')
@@ -111,6 +112,92 @@ const qtod = m.quoted? "true":"false"
 switch(command) {
 case 'menu': {
 mans.sendMessage(from, {text:listmn}, {quoted:m})
+}
+break
+case 'nulis': {
+if (args.length < 1) return m.reply(`Example :\n${prefix}nulis MyMainas|91|#ff020a|Manusia terganteng adalah salman alfarizi`)
+const nls = body.slice(7)
+const nams = "Nama : " + nls.split("|")[0];
+const kels = "Kelas : " + nls.split("|")[1];
+const menlise = nls.split("|")[3];
+const codewarn = nls.split("|")[2];
+await m.reply('Sedang menulis')
+const jangkale = menlise.replace(/(\S+\s*){1,10}/g, '$&\n')
+const jangbare = jangkale.split('\n').slice(0, 30).join('\n')
+const jangnam = nams.replace(/(\S+\s*){1,10}/g, '$&\n')
+const jangkel = kels.replace(/(\S+\s*){1,10}/g, '$&\n')
+if (kels.length > 12) return m.reply("Jumlah teks kelas maximal 4")
+if (nams.length > 34) return m.reply("Jumlah teks nama maximal 27")
+if (codewarn.length > 7) return m.reply("Jumlah teks warna maximal 7")
+console.log('「 MENULIS 」Sedang dalam prosses')
+spawn('convert', [
+'./media/image/magernulis.jpg',
+'-fill',
+codewarn,
+'-font',
+'./media/font/nulis.ttf',
+'-size',
+'1024x784',
+'-pointsize',
+'20',
+'-interline-spacing',
+'1',
+'-annotate',
+'+806+78',
+janghar,
+'-size',
+'1024x784',
+'-pointsize',
+'18',
+'-interline-spacing',
+'1',
+'-annotate',
+'+806+102',
+jangwak,
+'-size',
+'1024x784',
+'-pointsize',
+'21',
+'-interline-spacing',
+'1',
+'-annotate',
+'+285+90',
+jangnam,
+'-size',
+'1024x784',
+'-pointsize',
+'21',
+'-interline-spacing',
+'1',
+'-annotate',
+'+285+110',
+jangkel,
+'-size',
+'1024x784',
+'-pointsize',
+'20',
+'-interline-spacing',
+'-7.5',
+'-annotate',
+'+344+146',
+jangbare,
+'./storage/hasilnulis.jpg'
+])
+.on('error', () => m.reply('Error') )
+.on('exit', () => {
+mans.sendMessage(from, {image:fs.readFileSync('./storage/hasilnulis.jpg'), caption:'Succes'}, {quoted:m}).catch(() => m.reply('```「 GAGAL 」Terjadi kesalahan dalam mengirim file```'))
+})
+exec(`npm i marker`)
+}
+break
+case 'kalkulator': case 'kal': {
+if (args.length < 1) return m.reply(`*Example :*\n${prefix}kalkulator 2 * 5\n\n*List Bilangan :*\n•> Kali : *\n•> Bagi : /\n•> Tambah : +\n•> Kurang : -`)
+let qsd = args.join(" ")
+if (typeof mathjs.evaluate(qsd) !== 'number') {
+m.reply('Error')
+} else {
+m.reply(`\`\`\`「 Kalkulator 」\`\`\`\n\n*•> Hitung :* ${qsd}\n*•> Hasil :* ${mathjs.evaluate(qsd.replace(/×/g, "*").replace(/x/g, "*").replace(/÷/g, "/"))}`)
+}
 }
 break
 case 'public': {
