@@ -106,7 +106,7 @@ let msg = {
 mans.ev.emit('messages.upsert', msg)
 }
 
-const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, getpic, getname, sticker, smeme, toimage, tomp4, toaudio, tomp3, tovn, togif, tourl, quoted, ping, self, public, owner`
+const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, getpic, getname, sticker, smeme, toimage, tomp4, toaudio, tomp3, tovn, togif, tourl, nulis, kalkulator, quoted, ping, self, public, owner`
 const qtod = m.quoted? "true":"false"
 // Case Nye Sini Ngab
 switch(command) {
@@ -116,7 +116,7 @@ mans.sendMessage(from, {text:listmn}, {quoted:m})
 break
 case 'nulis': {
 if (args.length < 1) return m.reply(`Example :\n${prefix}nulis MyMainas|91|#ff020a|Manusia terganteng adalah salman alfarizi`)
-const nls = body.slice(7)
+const nls = args.join(" ")
 const nams = "Nama : " + nls.split("|")[0];
 const kels = "Kelas : " + nls.split("|")[1];
 const menlise = nls.split("|")[3];
