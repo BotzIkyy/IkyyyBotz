@@ -77,6 +77,7 @@ const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
 const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
 
 // Quoted
+const content = JSON.stringify(m.message)
 		const isQuotedImage = m.mtype === 'extendedTextMessage' && content.includes('imageMessage')
 		const isQuotedVideo = m.mtype === 'extendedTextMessage' && content.includes('videoMessage')
 		const isQuotedAudio = m.mtype === 'extendedTextMessage' && content.includes('audioMessage')
