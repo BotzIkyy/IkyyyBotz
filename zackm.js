@@ -149,15 +149,15 @@ const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest
 const qtod = m.quoted? "true":"false"
 
 async groupQueryInvite(code) {
-        let result = await mans.query({
-            tag: "iq",
-            attrs: {
-                type: "get",
-                xmlns: "w:g2",
-                to: "@g.us"
-            },
-            content: [{ tag: "invite", attrs: { code } }]
-        })
+let result = await mans.query({
+tag: "iq",
+attrs: {
+type: "get",
+xmlns: "w:g2",
+to: "@g.us"
+},
+content: [{ tag: "invite", attrs: { code } }]
+})
         
 // Case Nye Sini Ngab
 switch(command) {
@@ -167,11 +167,11 @@ mans.sendMessage(from, {text:listmn}, {quoted:m})
 break
 case 'inspect': {
 let linkRegex = /chat\.whatsapp\.com\/(?:invite\/)?([0-9A-Za-z]{20,24})/i
-        let [, code] = args.join(" ").match(linkRegex) || {}
-        if (!code) return m.reply("Link Invalid")
-        let res = await groupQueryInvite(code)
-        if (!res) return m.reply(String(res))
-        let teks = `
+let [, code] = args.join(" ").match(linkRegex) || {}
+if (!code) return m.reply("Link Invalid")
+let res = await groupQueryInvite(code)
+if (!res) return m.reply(String(res))
+let teks = `
     「 Group Link Inspector 」
 ⬡ *ID :* ${res.id}
 ⬡ *Subject :* ${res.subject}
@@ -186,13 +186,12 @@ let linkRegex = /chat\.whatsapp\.com\/(?:invite\/)?([0-9A-Za-z]{20,24})/i
 ⬡ *Description :*\n${res.desc ? res.desc : "No Description"}
 ⬡ *Friends Who Are Known to Join :*\n${res.participants ? res.participants.map((user, i) => ++i + ". @" + user.jid.split("@")[0]).join("\n").trim() : "Not Found"}
         `
-        let pp
-        try {
-            pp = await mans.profilePictureUrl(res.id, "image")
-        } catch {
-            pp = "https://tse2.mm.bing.net/th?id=OIP.n1C1oxOvYLLyDIavrBFoNQHaHa&pid=Api&P=0&w=153&h=153"
-        }
-        mans.sendFile(m.from, pp, "", m, { caption: teks, mentions: await mans.parseMention(teks) })
+try {
+pp = await mans.profilePictureUrl(res.id, "image")
+} catch {
+pp = "https://tse2.mm.bing.net/th?id=OIP.n1C1oxOvYLLyDIavrBFoNQHaHa&pid=Api&P=0&w=153&h=153"
+}
+mans.sendFile(m.chat, pp, "", m, { caption: teks, mentions: await mans.parseMention(teks) })
 }
 break
 case 'join': {

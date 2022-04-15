@@ -133,6 +133,7 @@ console.log(err)
     mans.ev.on('creds.update', saveState)
 
     // Add Other
+   
     /** Send Button 5 Image
      *
      * @param {*} jid
@@ -445,6 +446,29 @@ console.log(err)
             data
         }
 
+    }
+    mans.sendFile = async(jid, PATH, fileName, quoted = {}, options = {}) {
+        let types = await mans.getFile(PATH, true)
+        let { filename, size, ext, mime, data } = types
+        let type = '', mimetype = mime, pathFile = filename
+        if (options.asDocument) type = 'document'
+        if (options.asSticker || /webp/.test(mime)) {
+            let { writeExif } = require('./lib/sticker.js')
+            let media = { mimetype: mime, data }
+            pathFile = await writeExif(media, { packname: global.packname, author: global.packname2, categories: options.categories ? options.categories : [] })
+            await fs.promises.unlink(filename)
+            type = 'sticker'
+            mimetype = 'image/webp'
+        }
+        else if (/image/.test(mime)) type = 'image'
+        else if (/video/.test(mime)) type = 'video'
+        else if (/audio/.test(mime)) type = 'audio'
+        else type = 'document'
+        await mans.sendMessage(jid, { [type]: { url: pathFile }, mimetype, fileName, ...options }, { quoted, ...options })
+        return fs.promises.unlink(pathFile)
+    }
+    mans.parseMention(text) {
+        return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net')
     }
 
     return mans
