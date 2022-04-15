@@ -167,11 +167,11 @@ mans.sendMessage(from, {text:listmn}, {quoted:m})
 }
 break
 case 'inspect': {
+if (!args[0]) return m.reply("Linknya?")
 let linkRegex = args.join(" ")
 let code = linkRegex.split("https://chat.whatsapp.com/")[1]
 if (!code) return m.reply("Link Invalid")
 let res = await groupQueryInvite(code)
-if (!res) return m.reply(String(res))
 let teks = `
     「 Group Link Inspector 」
 ⬡ *ID :* ${res.id}
