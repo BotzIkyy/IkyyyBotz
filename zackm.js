@@ -153,6 +153,33 @@ case 'menu': {
 mans.sendMessage(from, {text:listmn}, {quoted:m})
 }
 break
+case 'join': {
+vdd = args[0]
+vcc = vdd.split("https://chat.whatsapp.com/")[1]
+mans.query({
+tag: "iq",
+attrs: {
+type: "get",
+xmlns: "w:g2",
+to: "@g.us"
+}, content: [{ tag: "invite", attrs: { code: vcc } }]
+}).then((res) => {
+sizny = res.content[0].attrs.size
+if (sizny < 50) {
+m.reply(`Maaf anggota group anda kurang dari 50, minimal agar bot join harus mempunyai lebih dari 50 anggota`)
+} else if (siznya > 50) {
+try {
+await mans.groupAcceptInvite(vcc).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
+m.reply("Succes")
+} catch {
+m.reply("error")
+}
+} else {
+m.reply("Error")
+}
+}).catch(_ => _)
+}
+break
 case 'volume': {
 if (!args.join(" ")) return m.reply(`Example: ${prefix + command} 10`)
 media = await mans.downloadAndSaveMediaMessage(quoted, "volume")
