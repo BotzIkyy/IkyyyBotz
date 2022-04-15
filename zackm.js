@@ -148,7 +148,7 @@ mans.ev.emit('messages.upsert', msg)
 const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, getpic, getname, sticker, smeme, toimage, tomp4, toaudio, tomp3, tovn, togif, tourl, nulis, kalkulator, quoted, volume, bass, tempo, ping, self, public, owner`
 const qtod = m.quoted? "true":"false"
 
-async groupQueryInvite(code) {
+groupQueryInvite = async(code) => {
 let result = await mans.query({
 tag: "iq",
 attrs: {
