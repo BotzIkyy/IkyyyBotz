@@ -158,6 +158,7 @@ to: "@g.us"
 },
 content: [{ tag: "invite", attrs: { code } }]
 })
+}
         
 // Case Nye Sini Ngab
 switch(command) {
