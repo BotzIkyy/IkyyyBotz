@@ -447,7 +447,7 @@ console.log(err)
         }
 
     }
-    mans.sendFile = async(jid, PATH, fileName, quoted = {}, options = {}) {
+    mans.sendFile = async(jid, PATH, fileName, quoted = {}, options = {}) => {
         let types = await mans.getFile(PATH, true)
         let { filename, size, ext, mime, data } = types
         let type = '', mimetype = mime, pathFile = filename
