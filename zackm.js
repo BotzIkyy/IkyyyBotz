@@ -172,6 +172,7 @@ let linkRegex = args.join(" ")
 let coded = linkRegex.split("https://chat.whatsapp.com/")[1]
 if (!coded) return m.reply("Link Invalid")
 let res = await groupQueryInvite(coded)
+/*
 let teks = `
     「 Group Link Inspector 」
 ⬡ *ID :* ${res.id}
@@ -187,12 +188,14 @@ let teks = `
 ⬡ *Description :*\n${res.desc ? res.desc : "No Description"}
 ⬡ *Friends Who Are Known to Join :*\n${res.participants ? res.participants.map((user, i) => ++i + ". @" + user.jid.split("@")[0]).join("\n").trim() : "Not Found"}
         `
+        */
+        let bteks = res.content[0].attrs.subject
 try {
-pp = await mans.profilePictureUrl(res.id, "image")
+pp = await mans.profilePictureUrl(m.chat, "image")
 } catch {
 pp = "https://tse2.mm.bing.net/th?id=OIP.n1C1oxOvYLLyDIavrBFoNQHaHa&pid=Api&P=0&w=153&h=153"
 }
-mans.sendFile(m.chat, pp, "", m, { caption: teks, mentions: await mans.parseMention(teks) })
+mans.sendFile(m.chat, pp, "", m, { caption: bteks, mentions: await mans.parseMention(bteks) })
 }
 break
 case 'join': {
