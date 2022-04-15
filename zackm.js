@@ -168,7 +168,7 @@ mans.sendMessage(from, {text:listmn}, {quoted:m})
 break
 case 'inspect': {
 let linkRegex = /chat\.whatsapp\.com\/(?:invite\/)?([0-9A-Za-z]{20,24})/i
-let [, code] = args.join(" ").match(linkRegex) || {}
+let code = args.join(" ").match(linkRegex) || {}
 if (!code) return m.reply("Link Invalid")
 let res = await groupQueryInvite(code)
 if (!res) return m.reply(String(res))
