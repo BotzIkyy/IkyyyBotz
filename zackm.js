@@ -36,6 +36,27 @@ if (global.db) global.db = {
     ...(global.db || {})
 }
 
+// UCAPAN WAKTU ( MyMans APIs)
+const time2 = moment().tz('Asia/Jakarta').format('HH:mm:ss')
+if(time2 < "23:59:00"){
+var ucapanWaktu = 'Selamat Malam'
+                                        }
+if(time2 < "19:00:00"){
+var ucapanWaktu = 'Selamat Petang'
+                                         }
+if(time2 < "18:00:00"){
+var ucapanWaktu = 'Selamat Sore'
+                                         }
+if(time2 < "15:00:00"){
+var ucapanWaktu = 'Selamat Siang'
+                                         }
+if(time2 < "11:00:00"){
+var ucapanWaktu = 'Selamat Pagi'
+                                         }
+if(time2 < "05:00:00"){
+var ucapanWaktu = 'Selamat Malam'
+                                         }
+
 // TANGGAL ( MyMans APIs )
 var buln = ['/01/', '/02/', '/03/', '/04/', '/05/', '/06/', '/07/', '/08/', '/09/', '/10/', '/11/', '/12/'];
 var myHari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -89,6 +110,10 @@ const content = JSON.stringify(m.message)
         const isQuotedTag = m.mtype === 'extendedTextMessage' && content.includes('mentionedJid')
         const isQuotedProd = m.mtype === 'extendedTextMessage' && content.includes('productMessage')
         const isQuotedReply = m.mtype === 'extendedTextMessage' && content.includes('Message')
+
+if (m.message) {
+console.log(chalk.black(chalk.bgWhite('[ PESAN ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> Dari'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> Di'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
+}
 
 // Public & Self
 if (!mans.public) {
