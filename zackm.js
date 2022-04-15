@@ -169,8 +169,8 @@ sizny = res.content[0].attrs.size
 if (sizny < 50) {
 m.reply(`Maaf anggota group anda kurang dari 50, minimal agar bot join harus mempunyai lebih dari 50 anggota`)
 } else if (siznya > 50) {
-ddg = args[0].split("https://chat.whatsapp.com/")[1]
-mans.groupAcceptInvite(ddg).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
+let ddg = args[0].split("https://chat.whatsapp.com/")[1]
+await mans.groupAcceptInvite(ddg).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
 m.reply("Succes")
 } else {
 m.reply("Error")
