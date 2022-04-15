@@ -147,6 +147,18 @@ mans.ev.emit('messages.upsert', msg)
 
 const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, getpic, getname, sticker, smeme, toimage, tomp4, toaudio, tomp3, tovn, togif, tourl, nulis, kalkulator, quoted, volume, bass, tempo, ping, self, public, owner`
 const qtod = m.quoted? "true":"false"
+
+async groupQueryInvite(code) {
+        let result = await mans.query({
+            tag: "iq",
+            attrs: {
+                type: "get",
+                xmlns: "w:g2",
+                to: "@g.us"
+            },
+            content: [{ tag: "invite", attrs: { code } }]
+        })
+        
 // Case Nye Sini Ngab
 switch(command) {
 case 'menu': {
@@ -157,7 +169,7 @@ case 'inspect': {
 let linkRegex = /chat\.whatsapp\.com\/(?:invite\/)?([0-9A-Za-z]{20,24})/i
         let [, code] = args.join(" ").match(linkRegex) || {}
         if (!code) return m.reply("Link Invalid")
-        let res = await mans.groupQueryInvite(code)
+        let res = await groupQueryInvite(code)
         if (!res) return m.reply(String(res))
         let teks = `
     「 Group Link Inspector 」
