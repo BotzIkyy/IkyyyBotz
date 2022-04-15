@@ -154,8 +154,9 @@ mans.sendMessage(from, {text:listmn}, {quoted:m})
 }
 break
 case 'join': {
-vdd = args[0]
-vcc = vdd.split("https://chat.whatsapp.com/")[1]
+if (!args[0]) return m.reply("Linknya mana kak?")
+const vdd = args[0]
+const vcc = vdd.split("https://chat.whatsapp.com/")[1]
 mans.query({
 tag: "iq",
 attrs: {
@@ -168,12 +169,8 @@ sizny = res.content[0].attrs.size
 if (sizny < 50) {
 m.reply(`Maaf anggota group anda kurang dari 50, minimal agar bot join harus mempunyai lebih dari 50 anggota`)
 } else if (siznya > 50) {
-try {
-await mans.groupAcceptInvite(vcc).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
+mans.groupAcceptInvite(vcc).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
 m.reply("Succes")
-} catch {
-m.reply("error")
-}
 } else {
 m.reply("Error")
 }
