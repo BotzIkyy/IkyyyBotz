@@ -157,7 +157,7 @@ xmlns: "w:g2",
 to: "@g.us"
 },
 content: [{ tag: "invite", attrs: { code: ndcod } }]
-}).then(async(res) => options).catch(_ => _)
+}).then(async(res) => {options}).catch(_ => _)
 }
         
 // Case Nye Sini Ngab
