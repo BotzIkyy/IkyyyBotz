@@ -214,8 +214,7 @@ m.reply("Succes")
 } else {
 m.reply("Error")
 }
-}).catch(_ => _)
-)
+})
 }
 break
 case 'volume': {
