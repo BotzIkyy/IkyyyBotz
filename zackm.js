@@ -145,10 +145,10 @@ let msg = {
 mans.ev.emit('messages.upsert', msg)
 }
 
-const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, getpic, getname, sticker, smeme, toimage, tomp4, toaudio, tomp3, tovn, togif, tourl, nulis, kalkulator, quoted, volume, bass, tempo, ping, self, public, owner`
+const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, getpic, getname, sticker, smeme, toimage, tomp4, toaudio, tomp3, tovn, togif, tourl, nulis, kalkulator, quoted, join, volume, bass, tempo, ping, self, public, owner`
 const qtod = m.quoted? "true":"false"
 
-groupQueryInvite = async(ndcod) => {
+mans.groupQueryInvite = async(ndcod, options = {}) => {
 let result = await mans.query({
 tag: "iq",
 attrs: {
@@ -157,7 +157,7 @@ xmlns: "w:g2",
 to: "@g.us"
 },
 content: [{ tag: "invite", attrs: { code: ndcod } }]
-})
+}).then(async(res) => options).catch(_ => _)
 }
         
 // Case Nye Sini Ngab
@@ -166,13 +166,14 @@ case 'menu': {
 mans.sendMessage(from, {text:listmn}, {quoted:m})
 }
 break
+/*
 case 'inspect': {
 if (!args[0]) return m.reply("Linknya?")
 let linkRegex = args.join(" ")
 let coded = linkRegex.split("https://chat.whatsapp.com/")[1]
 if (!coded) return m.reply("Link Invalid")
 let res = await groupQueryInvite(coded)
-/*
+
 let teks = `
     「 Group Link Inspector 」
 ⬡ *ID :* ${res.id}
@@ -188,7 +189,7 @@ let teks = `
 ⬡ *Description :*\n${res.desc ? res.desc : "No Description"}
 ⬡ *Friends Who Are Known to Join :*\n${res.participants ? res.participants.map((user, i) => ++i + ". @" + user.jid.split("@")[0]).join("\n").trim() : "Not Found"}
         `
-        */
+        
         let bteks = res.subject
 try {
 pp = await mans.profilePictureUrl(m.chat, "image")
@@ -198,18 +199,12 @@ pp = "https://tse2.mm.bing.net/th?id=OIP.n1C1oxOvYLLyDIavrBFoNQHaHa&pid=Api&P=0&
 mans.sendFile(m.chat, pp, "", m, { caption: bteks, mentions: await mans.parseMention(bteks) })
 }
 break
+*/
 case 'join': {
 if (!args[0]) return m.reply("Linknya mana kak?")
 vdd = args[0]
 vcc = vdd.split("https://chat.whatsapp.com/")[1]
-mans.query({
-tag: "iq",
-attrs: {
-type: "get",
-xmlns: "w:g2",
-to: "@g.us"
-}, content: [{ tag: "invite", attrs: { code: vcc } }]
-}).then(async(res) => {
+mans.groupQueryInvite(vcc, {
 sizny = res.content[0].attrs.size
 if (sizny < 50) {
 m.reply(`Maaf anggota group anda kurang dari 50, minimal agar bot join harus mempunyai lebih dari 50 anggota`)
@@ -220,6 +215,7 @@ m.reply("Succes")
 m.reply("Error")
 }
 }).catch(_ => _)
+)
 }
 break
 case 'volume': {
