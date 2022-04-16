@@ -189,7 +189,7 @@ let teks = `
 ⬡ *Friends Who Are Known to Join :*\n${res.participants ? res.participants.map((user, i) => ++i + ". @" + user.jid.split("@")[0]).join("\n").trim() : "Not Found"}
         `
         */
-        let bteks = res.content[0].attrs.subject
+        let bteks = res.subject
 try {
 pp = await mans.profilePictureUrl(m.chat, "image")
 } catch {
@@ -213,9 +213,8 @@ to: "@g.us"
 sizny = res.content[0].attrs.size
 if (sizny < 50) {
 m.reply(`Maaf anggota group anda kurang dari 50, minimal agar bot join harus mempunyai lebih dari 50 anggota`)
-} else if (siznya > 50) {
-let ddg = args[0].split("https://chat.whatsapp.com/")[1]
-await mans.groupAcceptInvite(ddg)
+} else if (sizny > 50) {
+await mans.groupAcceptInvite(vcc).then(async(res) => m.reply(jsonformat(res))).catch(_ => _)
 m.reply("Succes")
 } else {
 m.reply("Error")
@@ -577,6 +576,7 @@ m.reply(`🌐Translate : ${Detek}\n📘Hasil : ${Infoo}`)
 }
 break
 case 'gimage': case 'gig': {
+if (!args[0]) return m.reply("Mau cari gambar apa kak?")
 let gis = require('g-i-s')
 gis(args.join(" "), async (error, result) => {
 n = result
