@@ -148,18 +148,25 @@ mans.ev.emit('messages.upsert', msg)
 const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, getpic, getname, sticker, smeme, toimage, tomp4, toaudio, tomp3, tovn, togif, tourl, nulis, kalkulator, quoted, join, volume, bass, tempo, ping, self, public, owner`
 const qtod = m.quoted? "true":"false"
 
-mans.groupQueryInvite = async(ndcod, options = {}) => {
-mans.query({
-tag: "iq",
-attrs: {
-type: "get",
-xmlns: "w:g2",
-to: "@g.us"
-},
-content: [{ tag: "invite", attrs: { code: ndcod } }]
-}).then(async(res) => {options}).catch(_ => _)
+const sendOrder = async(jid, text, orid, img, itcount, title, sellers, tokens, ammount) => {
+const order = generateWAMessageFromContent(jid, proto.Message.fromObject({
+ "orderMessage": {
+"orderId": orid, // Ganti Idnya
+"thumbnail": img, // Ganti Imagenya
+"itemCount": itcount, // Ganti Item Countnya
+"status": "INQUIRY", // Jangan Diganti
+"surface": "CATALOG", // Jangan Diganti
+"orderTitle": title, // Ganti Titlenya
+"message": text, // Ganti Messagenya
+"sellerJid": sellers, // Ganti sellernya
+"token": tokens, // Ganti tokenya
+"totalAmount1000": ammount, // Ganti Total Amountnya
+"totalCurrencyCode": "IDR", // Terserah
 }
-        
+}), { userJid: jid })
+mans.relayMessage(jid, order.message, { messageId: order.key.id})
+}
+
 // Case Nye Sini Ngab
 switch(command) {
 case 'menu': {
@@ -203,7 +210,8 @@ break
 case 'join': {
 if (!args[0]) return m.reply("Linknya mana kak?")
 vdd = args[0]
-vcc = vdd.split("https://chat.whatsapp.com/")[1]
+let vcc = vdd.split("https://chat.whatsapp.com/")[1]
+if (!vcc) return m.reply("Link invalid!")
 mans.query({
 tag: "iq",
 attrs: {
@@ -215,7 +223,8 @@ content: [{ tag: "invite", attrs: { code: vcc } }]
 }).then(async(res) => {
 sizny = res.content[0].attrs.size
 if (sizny < 50) {
-m.reply(`Maaf anggota group anda kurang dari 50, minimal agar bot join harus mempunyai lebih dari 50 anggota`)
+teks = `Maaf anggota group anda kurang dari 50, minimal agar bot join harus mempunyai lebih dari 50 anggota`
+sendOrder(m.chat, teks, "667140254502463", fs.readFileSync('./media/image/mans.jpg'), 2022, "ZackMans Official ~ Multi Device", "6283155687629@s.whatsapp.net", "AR6NCY8euY5cbS8Ybg5Ca55R8HFSuLO3qZqrIYCT7hQp0g==", "99999999999999999999")
 } else if (sizny > 50) {
 await mans.groupAcceptInvite(vcc).then(async(res) => m.reply(jsonformat(res))).catch(_ => _)
 m.reply("Succes")
