@@ -154,6 +154,22 @@ _Script By MyMans APIs - X - ZackMans Official_
 
 Library : Baileys - Multi Device
 
+▸ GROUP CHAT
+linkgroup <undefined>
+setppgc <image>
+setname <query>
+setdesc <query>
+ephemeral <query>
+hidetag <query>
+tagall <query>
+promote <query>
+demote <query>
+add <query>
+kick <query>
+revoke <undefined>
+group <open/close>
+editinfo <open/close>
+
 ▸ DOWNLOADER
 instagram <query>
 tiktok <query>
@@ -190,13 +206,17 @@ bass <query>
 tempo <query>
 translate <query>
 
+▸ OTHER
+owner <undefined>
+sc <undefined>
+ping <undefined>
+infochat <query>
+
 ▸ OWNER
 self <undefined>
 public <undefined>
 bcall <query>
 bcgroup <query>
-setlogo <query>
-setthumb <query>
 > / => / $
 
 THANKS TO :
@@ -226,7 +246,7 @@ mans.relayMessage(jid, order.message, { messageId: order.key.id})
 
 // Case Nye Sini Ngab
 switch(command) {
-case 'menu': {
+case 'menu': case 'help': {
 let message = await prepareWAMessageMedia({ video: fs.readFileSync('./media/video/mans.mp4'), gifPlayback:true, jpegThumbnail:global.log0 }, { upload: mans.waUploadToServer })
 const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
 templateMessage: {
@@ -266,28 +286,196 @@ id: 'sc'
 mans.relayMessage(m.chat, template.message, { messageId: template.key.id })
 }
 break
-case 'setthumb': {
+case 'infochat': {
+if (!m.quoted) m.reply('Reply Pesan')
+let msg = await m.getQuotedObj()
+if (!m.quoted.isBaileys) return m.reply('Pesan tersebut bukan dikirim oleh bot!')
+let teks = ''
+for (let i of msg.userReceipt) {
+let read = i.readTimestamp
+let unread = i.receiptTimestamp
+let waktu = read ? read : unread
+teks += `⭔ @${i.userJid.split('@')[0]}\n`
+teks += ` ┗━⭔ *Waktu :* ${moment(waktu * 1000).format('DD/MM/YY HH:mm:ss')} ⭔ *Status :* ${read ? 'Dibaca' : 'Terkirim'}\n\n`
+}
+mans.sendTextWithMentions(m.chat, teks, m)
+}
+break
+case 'setname': case 'setsubject': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins) return m.reply(mess.admin)
+if (!text) return m.reply('Text ?')
+await mans.groupUpdateSubject(m.chat, text).then((res) => m.reply(mess.success)).catch((err) => m.reply(jsonformat(err)))
+}
+break
+case 'setdesc': case 'setdesk': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins) return m.reply(mess.admin)
+if (!text) return m.reply('Text ?')
+await mans.groupUpdateDescription(m.chat, text).then((res) => m.reply(mess.success)).catch((err) => m.reply(jsonformat(err)))
+}
+break
+case 'setppbot': {
 if (!isCreator) return m.reply(mess.owner)
-if ((isMedias && !m.message.videoMessage || isQuotedImage || isQuotedSticker) && args.length == 0) {
-boij = isQuotedImage || isQuotedSticker ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : m
-delb = await mans.downloadMediaMessage(boij)
-fs.writeFileSync(fs.readFileSync("media/image/thumb.jpg"), delb)
-m.reply("Succes")
-} else {
-m.reply("Kirim gambar dengan caption setthumb")
+if (!quoted) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
+if (!/image/.test(mime)) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
+if (/webp/.test(mime)) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
+let media = await mans.downloadAndSaveMediaMessage(quoted)
+await mans.updateProfilePicture(botNumber, { url: media }).catch((err) => fs.unlinkSync(media))
+m.reply(mess.success)
+}
+break
+case 'setppgroup': case 'setppgrup': case 'setppgc': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isAdmins) return m.reply(mess.admin)
+if (!quoted) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
+if (!/image/.test(mime)) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
+if (/webp/.test(mime)) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
+let media = await mans.downloadAndSaveMediaMessage(quoted)
+await mans.updateProfilePicture(m.chat, { url: media }).catch((err) => fs.unlinkSync(media))
+m.reply(mess.success)
+}
+break
+case 'tagall': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins) return m.reply(mess.admin)
+let teks = `══✪〘 *👥 Tag All* 〙✪══
+ 
+ ➲ *Pesan : ${q ? q : 'kosong'}*\n\n`
+for (let mem of participants) {
+teks += `⭔ @${mem.id.split('@')[0]}\n`
+}
+mans.sendMessage(m.chat, { text: teks, mentions: participants.map(a => a.id) }, { quoted: m })
+}
+break
+case 'hidetag': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins) return m.reply(mess.admin)
+mans.sendMessage(m.chat, { text : q ? q : '' , mentions: participants.map(a => a.id)}, { quoted: m })
+}
+break
+case 'linkgroup': case 'linkgc': {
+if (!m.isGroup) return m.reply(mess.group)
+let response = await mans.groupInviteCode(m.chat)
+mans.sendMessage(m.chat, {text:`Link Group ${groupMetadata.subject} : \nhttps://chat.whatsapp.com/${response}l`, "contextInfo": {
+mimetype: "image/jpeg",
+text: "ZackMans Official",
+"forwardingScore": 1000000000,
+isForwarded: true,
+sendEphemeral: true,
+"externalAdReply": {
+"title": `ZackMans Official`,
+"body": `Subscribe To Channel YouTube ZackMans Official`,
+"previewType": "PHOTO",
+"thumbnailUrl": thum,
+"thumbnail": thum,
+"sourceUrl": "https://youtu.be/jKAawPBWe5k"
+}}}, { quoted: m, detectLink: true })
+}
+break
+case 'revoke': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
+mans.groupRevokeInvite(m.chat)
+}
+break
+case 'ephemeral': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins) return m.reply(mess.admin)
+if (!args[0]) return m.reply('Masukkan value enable/disable')
+if (args[0] === 'enable') {
+await mans.sendMessage(m.chat, { disappearingMessagesInChat: WA_DEFAULT_EPHEMERAL }).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
+} else if (args[0] === 'disable') {
+await mans.sendMessage(m.chat, { disappearingMessagesInChat: false }).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
 }
 }
 break
-case 'setlogo': {
-if (!isCreator) return m.reply(mess.owner)
-if ((isMedias && !m.message.videoMessage || isQuotedImage || isQuotedSticker) && args.length == 0) {
-boij = isQuotedImage || isQuotedSticker ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : m
-delb = await mans.downloadMediaMessage(boij)
-fs.writeFileSync(fs.readFileSync("media/image/mans.jpg"), delb)
-m.reply("Succes")
+case 'editinfo': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins) return m.reply(mess.admin)
+if (args[0] === 'open'){
+await mans.groupSettingUpdate(m.chat, 'unlocked').then((res) => m.reply(`Sukses Membuka Edit Info Group`)).catch((err) => m.reply(jsonformat(err)))
+} else if (args[0] === 'close'){
+await mans.groupSettingUpdate(m.chat, 'locked').then((res) => m.reply(`Sukses Menutup Edit Info Group`)).catch((err) => m.reply(jsonformat(err)))
 } else {
-m.reply("Kirim gambar dengan caption setthumb")
+let buttons = [
+{ buttonId: 'editinfo open', buttonText: { displayText: 'Open' }, type: 1 },
+{ buttonId: 'editinfo close', buttonText: { displayText: 'Close' }, type: 1 }
+]
+let buttonMessage = {
+image: log0,
+jpegThumbnail: thum,
+caption: `*「 ZackMans Official 」*\n\nChange Info, Select Open Or Close`,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4
 }
+mans.sendMessage(m.chat, buttonMessage, { quoted: m })
+}
+}
+break
+case 'group': case 'grup': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins) return m.reply(mess.admin)
+if (args[0] === 'close'){
+await mans.groupSettingUpdate(m.chat, 'announcement').then((res) => m.reply(`Sukses Menutup Group`)).catch((err) => m.reply(jsonformat(err)))
+} else if (args[0] === 'open'){
+await mans.groupSettingUpdate(m.chat, 'not_announcement').then((res) => m.reply(`Sukses Membuka Group`)).catch((err) => m.reply(jsonformat(err)))
+} else {
+let buttons = [
+{ buttonId: 'group open', buttonText: { displayText: 'Open' }, type: 1 },
+{ buttonId: 'group close', buttonText: { displayText: 'Close' }, type: 1 }
+]
+let buttonMessage = {
+image: log0,
+jpegThumbnail: thum,
+caption: `*「 ZackMans Official 」*\n\nChange Group Setting, Select Open Or Close`,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4
+}
+mans.sendMessage(m.chat, buttonMessage, { quoted: m })
+}
+}
+break
+case 'promote': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins) return m.reply(mess.admin)
+let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
+await mans.groupParticipantsUpdate(m.chat, [users], 'promote').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
+}
+break
+case 'demote': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins) return m.reply(mess.admin)
+let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
+await mans.groupParticipantsUpdate(m.chat, [users], 'demote').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
+}
+break
+case 'kick': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins) return m.reply(mess.admin)
+let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
+await mans.groupParticipantsUpdate(m.chat, [users], 'remove').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
+}
+break
+case 'add': {
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins) return m.reply(mess.admin)
+let users = m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
+await mans.groupParticipantsUpdate(m.chat, [users], 'add').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
 }
 break
 case 'bcgc': case 'bcgroup': {
@@ -608,7 +796,7 @@ m.reply('Sukse Change To Public Usage')
 }
 break
 case 'self': {
-if (!isCreator) throw m.reply(mess.owner)
+if (!isCreator) return m.reply(mess.owner)
 mans.public = false
 m.reply('Sukses Change To Self Usage')
 }
@@ -901,7 +1089,7 @@ m.reply("Linknya Error")
 break
 case 'ttdl': case 'tiktok': case 'ttmp4': case 'ttmp3': case 'tiktoknowm': {
 if (!args[0]) return m.reply(mess.linkm)
-let ltktk = args[0].split("https://vt.tiktok.com/")[1]
+let ltktk = args[0].includes("https://vt.tiktok.com/","https://vm.tiktok.com/")
 if (!ltktk) return m.reply("Link invalid!")
 try {
 hx.ttdownloader(args[0]).then(async(res) => {
