@@ -15,6 +15,7 @@ global.packname = "MyMans APIs"
 global.packname2 = "MyMainas"
 global.author = "ZackMans"
 global.sessionName = "mans"
+global.linkgrupss = "https://chat.whatsapp.com/HDmXvmHpEkE9wRJy3IO6OZ"
 global.prefa = ['','!','.','🐦','🐤','🗿']
 global.mess = {
     success: 'Success',

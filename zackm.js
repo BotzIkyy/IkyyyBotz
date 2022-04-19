@@ -99,6 +99,7 @@ const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
 
 // Quoted
 const content = JSON.stringify(m.message)
+        const isMedias = (m.mtype === 'imageMessage' || m.mtype === 'videoMessage')
 		const isQuotedImage = m.mtype === 'extendedTextMessage' && content.includes('imageMessage')
 		const isQuotedVideo = m.mtype === 'extendedTextMessage' && content.includes('videoMessage')
 		const isQuotedAudio = m.mtype === 'extendedTextMessage' && content.includes('audioMessage')
@@ -114,7 +115,10 @@ const content = JSON.stringify(m.message)
 if (m.message) {
 console.log(chalk.black(chalk.bgWhite('[ PESAN ]')), chalk.black(chalk.bgGreen(new Date)), chalk.black(chalk.bgBlue(budy || m.mtype)) + '\n' + chalk.magenta('=> Dari'), chalk.green(pushname), chalk.yellow(m.sender) + '\n' + chalk.blueBright('=> Di'), chalk.green(m.isGroup ? pushname : 'Private Chat', m.chat))
 }
-
+if (command) {
+await mans.sendPresenceUpdate('composing', m.chat)
+}
+ 
 // Public & Self
 if (!mans.public) {
 if (!m.key.fromMe) return
@@ -145,7 +149,60 @@ let msg = {
 mans.ev.emit('messages.upsert', msg)
 }
 
-const listmn = `tiktok, youtube, instagram, google, translate, gimage, pinterest, mp4, jpeg, getpic, getname, sticker, smeme, toimage, tomp4, toaudio, tomp3, tovn, togif, tourl, nulis, kalkulator, quoted, join, volume, bass, tempo, ping, self, public, owner`
+const listmn = `*ROBOT WHATSAPP MULTI DEVICE*
+_Script By MyMans APIs - X - ZackMans Official_
+
+Library : Baileys - Multi Device
+
+▸ DOWNLOADER
+instagram <query>
+tiktok <query>
+youtube <query>
+jpeg <query>
+mp4 <query>
+
+▸ SEARCH
+gimage <query>
+play <query>
+google <query>
+pinterest <query>
+
+▸ CONVERT
+sticker <image/video>
+smeme <image>
+tomp3 <video>
+tovn <video>
+toaudio <video>
+togif <video>
+tourl <query>
+tomp4 <sticker>
+toimage <sticker>
+
+▸ TOOLS
+getname <query>
+getpic <query>
+nulis <query>
+kalkulator <query>
+quoted <query>
+join <query>
+volume <quer>
+bass <query>
+tempo <query>
+translate <query>
+
+▸ OWNER
+self <undefined>
+public <undefined>
+bcall <query>
+bcgroup <query>
+setlogo <query>
+setthumb <query>
+> / => / $
+
+THANKS TO :
+adiwajshing, MhankBarBar, Nurutomo, MyMans APIs - X - ZackMans Official, Dika Ardnt, Heroku, Replit, Railway, Termux, Rest APIs, Penyedia Module, Mastah Lainya
+
+${jangwak}`
 const qtod = m.quoted? "true":"false"
 
 const sendOrder = async(jid, text, orid, img, itcount, title, sellers, tokens, ammount) => {
@@ -170,7 +227,151 @@ mans.relayMessage(jid, order.message, { messageId: order.key.id})
 // Case Nye Sini Ngab
 switch(command) {
 case 'menu': {
-mans.sendMessage(from, {text:listmn}, {quoted:m})
+let message = await prepareWAMessageMedia({ video: fs.readFileSync('./media/video/mans.mp4'), gifPlayback:true, jpegThumbnail:global.log0 }, { upload: mans.waUploadToServer })
+const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
+templateMessage: {
+hydratedTemplate: {
+videoMessage: message.videoMessage,
+hydratedContentText: listmn,
+hydratedFooterText: "© MyMans APIs - X - ZackMans Official",
+hydratedButtons: [{
+urlButton: {
+displayText: 'Group Whatsapp',
+url: linkgrupss
+}
+}, {
+urlButton: {
+displayText: 'Instagram',
+url: 'https://instagram.com/salman_alfarizi_15'
+}
+}, {
+quickReplyButton: {
+displayText: 'Status Bot',
+id: 'ping'
+}
+}, {
+quickReplyButton: {
+displayText: 'Contact Owner',
+id: 'owner'
+}  
+}, {
+quickReplyButton: {
+displayText: 'Script',
+id: 'sc'
+}
+}]
+}
+}
+}), { userJid: m.chat, quoted: m })
+mans.relayMessage(m.chat, template.message, { messageId: template.key.id })
+}
+break
+case 'setthumb': {
+if (!isCreator) return m.reply(mess.owner)
+if ((isMedias && !m.message.videoMessage || isQuotedImage || isQuotedSticker) && args.length == 0) {
+boij = isQuotedImage || isQuotedSticker ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : m
+delb = await mans.downloadMediaMessage(boij)
+fs.writeFileSync(fs.readFileSync("media/image/thumb.jpg"), delb)
+m.reply("Succes")
+} else {
+m.reply("Kirim gambar dengan caption setthumb")
+}
+}
+break
+case 'setlogo': {
+if (!isCreator) return m.reply(mess.owner)
+if ((isMedias && !m.message.videoMessage || isQuotedImage || isQuotedSticker) && args.length == 0) {
+boij = isQuotedImage || isQuotedSticker ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : m
+delb = await mans.downloadMediaMessage(boij)
+fs.writeFileSync(fs.readFileSync("media/image/mans.jpg"), delb)
+m.reply("Succes")
+} else {
+m.reply("Kirim gambar dengan caption setthumb")
+}
+}
+break
+case 'bcgc': case 'bcgroup': {
+if (!isCreator) return m.reply(mess.owner)
+if (!args.join(" ")) return m.reply(`Text mana?\n\nExample : ${prefix + command} ZackMans Official`)
+let getGroups = await mans.groupFetchAllParticipating()
+let groups = Object.entries(getGroups).slice(0).map(entry => entry[1])
+let anu = groups.map(v => v.id)
+m.reply(`Mengirim Broadcast Ke ${anu.length} Group Chat, Waktu Selesai ${anu.length * 1.5} detik`)
+for (let i of anu) {
+await sleep(1500)
+let btn = [{
+urlButton: {
+displayText: 'Source Code',
+url: 'https://github.com/ZackMans/ZackBotMans/'
+}
+}, {
+urlButton: {
+displayText: 'Group Whatsapp',
+url: linkgrupss
+}
+}, {
+quickReplyButton: {
+displayText: 'Status Bot',
+id: 'ping'
+}
+}, {
+quickReplyButton: {
+displayText: 'Contact Owner',
+id: 'owner'
+}  
+}, {
+quickReplyButton: {
+displayText: 'Script',
+id: 'sc'
+}
+}]
+let txt = `*「 ZackMans Broadcast 」*\n\n${text}`
+mans.send5ButImg(i, txt, "© MyMans APIs - X - ZackMans Official", log0, btn, thum)
+}
+m.reply(`Sukses Mengirim Broadcast Ke ${anu.length} Group`)
+}
+break
+case 'bc': case 'broadcast': case 'bcall': {
+if (!isCreator) return m.reply(mess.owner)
+if (!args.join(" ")) return m.reply(`Text mana?\n\nExample : ${prefix + command} ZackMans Official`)
+let anu = await store.chats.all().map(v => v.id)
+m.reply(`Mengirim Broadcast Ke ${anu.length} Chat\nWaktu Selesai ${anu.length * 1.5} detik`)
+for (let yoi of anu) {
+await sleep(1500)
+let btn = [{
+urlButton: {
+displayText: 'Source Code',
+url: 'https://github.com/ZackMans/ZackBotMans'
+}
+}, {
+urlButton: {
+displayText: 'Group Whatsapp',
+url: linkgrupss
+}
+}, {
+quickReplyButton: {
+displayText: 'Status Bot',
+id: 'ping'
+}
+}, {
+quickReplyButton: {
+displayText: 'Contact Owner',
+id: 'owner'
+}  
+}, {
+quickReplyButton: {
+displayText: 'Script',
+id: 'sc'
+}
+}]
+let txt = `*「 ZackMans Broadcast 」*\n\n${text}`
+mans.send5ButImg(yoi, txt, "© MyMans APIs - X - ZackMans Official", log0, btn, thum)
+}
+m.reply('Sukses Broadcast')
+}
+break
+case 'sc': case 'script': {
+m.reply('Script : https://github.com/ZackMans/ZackBotMans/\n\nDonate : 6281385062956 (Dana, Gopay)\n\n Dont Forget Donate')
 }
 break
 /*
@@ -700,6 +901,8 @@ m.reply("Linknya Error")
 break
 case 'ttdl': case 'tiktok': case 'ttmp4': case 'ttmp3': case 'tiktoknowm': {
 if (!args[0]) return m.reply(mess.linkm)
+let ltktk = args[0].split("https://vt.tiktok.com/")[1]
+if (!ltktk) return m.reply("Link invalid!")
 try {
 hx.ttdownloader(args[0]).then(async(res) => {
 texttk = `*| TIKTOK DOWNLOADER |*
