@@ -3,6 +3,7 @@
  - Contact Me on https://wa.me/+6281385062956
  - Follow iG : @salman_alfarizi_15
  - Thanks Dika Ardnt
+ tes
 */
 
 require("./config")
@@ -179,6 +180,7 @@ mp4 <query>
 
 ▸ SEARCH
 gimage <query>
+ytsearch <query>
 play <query>
 google <query>
 pinterest <query>
@@ -284,6 +286,18 @@ id: 'sc'
 }
 }), { userJid: m.chat, quoted: m })
 mans.relayMessage(m.chat, template.message, { messageId: template.key.id })
+}
+break
+case 'yts': case 'ytsearch': {
+if (!args.join(" ")) return m.reply(`Example : ${prefix + command} dj 30 detik`)
+let yts = require("yt-search")
+let search = await yts(args.join(" "))
+let teks = '*| YOUTUBE SEARCH |*\n\n Result From '+text+'\n\n'
+let no = 1
+for (let i of search.all) {
+teks += `⭔ No : ${no++}\n⭔ Type : ${i.type}\n⭔ Video ID : ${i.videoId}\n⭔ Title : ${i.title}\n⭔ Views : ${i.views}\n⭔ Duration : ${i.timestamp}\n⭔ Upload At : ${i.ago}\n⭔ Author : ${i.author.name}\n⭔ Url : ${i.url}\n\n─────────────────\n\n`
+}
+mans.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: teks }, { quoted: m })
 }
 break
 case 'infochat': {
@@ -1089,8 +1103,6 @@ m.reply("Linknya Error")
 break
 case 'ttdl': case 'tiktok': case 'ttmp4': case 'ttmp3': case 'tiktoknowm': {
 if (!args[0]) return m.reply(mess.linkm)
-let ltktk = args[0].includes("https://vt.tiktok.com/","https://vm.tiktok.com/")
-if (!ltktk) return m.reply("Link invalid!")
 try {
 hx.ttdownloader(args[0]).then(async(res) => {
 texttk = `*| TIKTOK DOWNLOADER |*
