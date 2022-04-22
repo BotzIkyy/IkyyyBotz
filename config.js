@@ -35,6 +35,10 @@ global.mess = {
     linkm: 'Linknya Mana Kak?',
     ban: 'Kamu telah dibanned oleh owner, Jika ingin di unbanned chat owner'
 }
+global.limitawal = {
+    rakyat: "Infinity",
+    free: 100
+}
 
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
