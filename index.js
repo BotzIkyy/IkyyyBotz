@@ -19,6 +19,10 @@ const PhoneNumber = require('awesome-phonenumber')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetchJson, await, sleep } = require('./lib/myfunc')
 
+maxCachedMessages = 50
+
+require("http").createServer((_, res) => res.end("Hallo World!")).listen(8080)
+
 const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
 
 async function startMans() {
@@ -47,6 +51,117 @@ require("./zackm")(mans, m, chatUpdate, store)
 console.log(err)
 }
 })
+
+mans.ev.on('group-participants.update', async (anu) => {
+        console.log(anu)
+        try {
+            let metadata = await mans.groupMetadata(anu.id)
+            let participants = anu.participants
+            let behys = anu.participants.length
+            for (let num of participants) {
+                // Get Profile Picture User
+                try {
+                    ppuser = await mans.profilePictureUrl(num, 'image')
+                } catch {
+                    ppuser = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
+                }
+
+                // Get Profile Picture Group
+                try {
+                    ppgroup = await mans.profilePictureUrl(anu.id, 'image')
+                } catch {
+                    ppgroup = 'https://i0.wp.com/www.gambarunik.id/wp-content/uploads/2019/06/Top-Gambar-Foto-Profil-Kosong-Lucu-Tergokil-.jpg'
+                }
+if (anu.action == 'add') {
+                	if (gcrevoke.includes(anu.id)) {
+                mbcs = `*| AUTO REVOKE LINK GROUP |*
+
+Jika ingin mematikan fitur auto revoke link group ketik autorevoke off atau anda bisa mengklik tombol dibawah
+
+Link group akan direset dalam 5 detik lagi!!`
+                    let buttons = [
+{buttonId: `autorevoke off`, buttonText: {displayText: 'Nonaktifkan'}, type: 1}
+]
+let buttonMessage = {
+image: fs.readFileSync("./media/image/mans.jpg"),
+jpegThumbnail: fs.readFileSync("./media/image/thumb.jpg"),
+caption: mbcs,
+footer: "© MyMans APIs - X - ZackMans Official",
+buttons: buttons,
+headerType: 4,
+}
+mans.sendMessage(m.chat, buttonMessage)
+await sleep(5000)
+mans.groupRevokeInvite(m.chat)
+                    }
+                	if (!wlcm.includes(anu.id)) return
+                hesa = `${participants}`
+		  mestes = (teks) => {
+					return teks.replace(/['@s whatsapp.net']/g, " ");
+					}
+			resa = `${mestes(hesa)}`
+                const jm = moment.tz('Asia/Jakarta').format('HH:mm:ss')
+			let d = new Date
+				let locale = 'id'
+					let gmt = new Date(0).getTime() - new Date('1 Januari 2021').getTime()
+					let weton = ['Pahing', 'Pon','Wage','Kliwon','Legi'][Math.floor(((d * 1) + gmt) / 84600000) % 5]
+					let week = d.toLocaleDateString(locale, { weekday: 'long' })
+					let calender = d.toLocaleDateString(locale, {
+				day: 'numeric',
+				month: 'long',
+				year: 'numeric'
+				})
+				exec(`magick './media/image/wel.jpg' -gravity west -fill '#ffffff' -font './media/font/font-gue.ttf' -size 1280x710 -pointsize 75 -interline-spacing 7.5 -annotate +460-47 '${resa}' -pointsize 51 -annotate +460+83 '${jm} ${calender}' -pointsize 48 -annotate +100+230 'MEMBER + ${behys}' -pointsize 63 -annotate +460+200 'Welcome To ${metadata.subject}' '${ppuser}' -resize %[fx:t?u.w*0.2:u.w]x%[fx:?u.h*0.2:u.h] -gravity center -geometry -430+66 -composite './storage/hasil.jpg'`)
+				.on('error', () => mans.sendMessage(m.chat, {text:'error'}))
+				.on('exit', () => {
+                orgnye = num
+                mbc = `Welcome To ${metadata.subject}
+
+@${orgnye.split("@")[0]} Jika ingin melihat list menu klik tombol menu dibawah
+
+jika tombol tidak terlihat di whatsapp versi lama atau mod kalian mengetik menu untuk melihat list menu`
+let buttons = [
+{buttonId: `menu`, buttonText: {displayText: 'Menu'}, type: 1}
+]
+let buttonMessage = {
+image: fs.readFileSync("./storage/hasil.jpg"),
+caption: mbc,
+footer: "© MyMans APIs - X - ZackMans Official",
+mentions:[orgnye],
+buttons: buttons,
+headerType: 4,
+}
+mans.sendMessage(m.chat, buttonMessage)
+})
+                } else if (anu.action == 'remove') {
+                	if (!wlcm.includes(anu.id)) return
+                hesa = `${participants}`
+		  mestes = (teks) => {
+					return teks.replace(/['@s whatsapp.net']/g, " ");
+					}
+			resa = `${mestes(hesa)}`
+const jamny = moment.tz('Asia/Jakarta').format('HH:mm:ss')
+			let d = new Date
+				let locale = 'id'
+					let gmt = new Date(0).getTime() - new Date('1 Janua@ri 2021').getTime()
+					let weton = ['Pahing', 'Pon','Wage','Kliwon','Legi'][Math.floor(((d * 1) + gmt) / 84600000) % 5]
+					let week = d.toLocaleDateString(locale, { weekday: 'long' })
+					let calender = d.toLocaleDateString(locale, {
+				day: 'numeric',
+				month: 'long',
+				year: 'numeric'
+				})
+				exec(`magick './media/image/lev.jpg' -gravity west -fill '#ffffff' -font './media/font/font-gue.ttf' -size 1280x710 -pointsize 75 -interline-spacing 7.5 -annotate +460-47 '${resa}' -pointsize 51 -annotate +460+83 '${jamny} ${calender}' -pointsize 48 -annotate +100+230 'MEMBER - ${behys}' -pointsize 63 -annotate +460+200 'Leaving from ${metadata.subject}' '${ppuser}' -resize %[fx:t?u.w*0.2:u.w]x%[fx:?u.h*0.2:u.h] -gravity center -geometry -430+66 -composite './storage/hasild.jpg'`)
+				.on('error', () => mans.sendMessage(m.chat, {text:'error'}))
+				.on('exit', () => {
+                    mans.sendMessage(anu.id, { image: fs.readFileSync("./storage/hasild.jpg"), contextInfo: { mentionedJid: [num] }, caption: `@${num.split("@")[0]} Leaving To ${metadata.subject}` })
+                })
+                }
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    })
 
 // Setting
     mans.decodeJid = (jid) => {

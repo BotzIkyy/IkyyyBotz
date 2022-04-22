@@ -10,12 +10,18 @@ const chalk = require("chalk")
 // Other
 global.thum = fs.readFileSync("./media/image/thumb.jpg")
 global.log0 = fs.readFileSync("./media/image/mans.jpg")
-global.owner = ["62882000383955","6281385062956"]
+global.owner = ['62882000383955','6281385062956']
+global.rkyt = []
+global.banUser = []
+global.ntilink = ['120363043965529911@g.us']
+global.wlcm = ['120363043965529911@g.us','120363023112413670@g.us','19054091487-1424650263@g.us']
+global.gcrevoke = ['19054091487-1424650263@g.us']
 global.packname = "MyMans APIs"
 global.packname2 = "MyMainas"
 global.author = "ZackMans"
 global.sessionName = "mans"
 global.linkgrupss = "https://chat.whatsapp.com/HDmXvmHpEkE9wRJy3IO6OZ"
+global.antitags = true
 global.prefa = ['','!','.','🐦','🐤','🗿']
 global.mess = {
     success: 'Success',
@@ -26,7 +32,8 @@ global.mess = {
     private: 'Fitur Digunakan Hanya Untuk Private Chat!',
     bot: 'Fitur Khusus Pengguna Nomor Bot',
     wait: 'Loading...',
-    linkm: 'Linknya Mana Kak?'
+    linkm: 'Linknya Mana Kak?',
+    ban: 'Kamu telah dibanned oleh owner, Jika ingin di unbanned chat owner'
 }
 
 let file = require.resolve(__filename)

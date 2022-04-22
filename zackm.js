@@ -7,7 +7,7 @@
 */
 
 require("./config")
-const { BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent, generateWAMessage, prepareWAMessageMedia, areJidsSameUser, getContentType } = require('@adiwajshing/baileys')
+const { BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent, generateWAMessage, prepareWAMessageMedia, areJidsSameUser, getContentType, WAFlag } = require('@adiwajshing/baileys')
 const fs = require('fs')
 const util = require('util')
 const chalk = require('chalk')
@@ -19,6 +19,8 @@ const moment = require('moment-timezone')
 const { JSDOM } = require('jsdom')
 const speed = require('performance-now')
 const hx = require("hxz-api")
+const yogipw = require("tod-api")
+const toHur = require('@develoka/angka-terbilang-js')
 const mathjs = require('mathjs')
 const { performance } = require('perf_hooks')
 const { Primbon } = require('scrape-primbon')
@@ -36,6 +38,18 @@ if (global.db) global.db = {
     users: {},
     ...(global.db || {})
 }
+
+let tebaklagu = db.game.tebaklagu = []
+let _family100 = db.game.family100 = []
+let kuismath = db.game.math = []
+let tebakgambar = db.game.tebakgambar = []
+let tebakkata = db.game.tebakkata = []
+let caklontong = db.game.lontong = []
+let caklontong_desk = db.game.lontong_desk = []
+let tebakkalimat = db.game.kalimat = []
+let tebaklirik = db.game.lirik = []
+let tebaktebakan = db.game.tebakan = []
+let vote = db.others.vote = []
 
 // UCAPAN WAKTU ( MyMans APIs)
 const time2 = moment().tz('Asia/Jakarta').format('HH:mm:ss')
@@ -98,6 +112,12 @@ const groupOwner = m.isGroup ? groupMetadata.owner : ''
 const isBotAdmins = m.isGroup ? groupAdmins.includes(botNumber) : false
 const isAdmins = m.isGroup ? groupAdmins.includes(m.sender) : false
 
+// Other
+const isBan = banUser.includes(m.sender)
+const AntiLink = m.isGroup ? ntilink.includes(from) : false
+const welcm = m.isGroup ? wlcm.includes(from) : false
+const GcRvk = m.isGroup ? gcrevoke.includes(from) : false
+
 // Quoted
 const content = JSON.stringify(m.message)
         const isMedias = (m.mtype === 'imageMessage' || m.mtype === 'videoMessage')
@@ -119,7 +139,55 @@ console.log(chalk.black(chalk.bgWhite('[ PESAN ]')), chalk.black(chalk.bgGreen(n
 if (command) {
 await mans.sendPresenceUpdate('composing', m.chat)
 }
- 
+
+const sendOrder = async(jid, text, orid, img, itcount, title, sellers, tokens, ammount) => {
+const order = generateWAMessageFromContent(jid, proto.Message.fromObject({
+ "orderMessage": {
+"orderId": orid, // Ganti Idnya
+"thumbnail": img, // Ganti Imagenya
+"itemCount": itcount, // Ganti Item Countnya
+"status": "INQUIRY", // Jangan Diganti
+"surface": "CATALOG", // Jangan Diganti
+"orderTitle": title, // Ganti Titlenya
+"message": text, // Ganti Messagenya
+"sellerJid": sellers, // Ganti sellernya
+"token": tokens, // Ganti tokenya
+"totalAmount1000": ammount, // Ganti Total Amountnya
+"totalCurrencyCode": "IDR", // Terserah
+}
+}), { userJid: jid })
+mans.relayMessage(jid, order.message, { messageId: order.key.id})
+}
+
+// Rakyat
+const isRakyat = rkyt.includes(m.sender)
+if (!isRakyat) {
+rkyt.push(m.sender)
+}
+
+// Detect Group Invite
+if (m.mtype === 'groupInviteMessage') {
+teks = `Ketik join untuk bergabung ke group whatsapp anda`
+sendOrder(m.chat, teks, "391028153034238", fs.readFileSync('./media/image/mans.jpg'), 2022, "ZackMans Official ~ Multi Device", "6283155687629@s.whatsapp.net", "AR7zJt8MasFx2Uir/fdxhkhPGDbswfWrAr2gmoyqNZ/0Wg==", "99999999999999999999")
+}
+
+// AntiLink
+if (AntiLink) {
+linkgce = await mans.groupInviteCode(from)
+if (budy.includes(`https://chat.whatsapp.com/${linkgce}`)) {
+m.reply(`\`\`\`「 Detect Link 」\`\`\`\n\nAnda tidak akan dikick bot karena yang anda kirim adalah link group yg ada di group ini`)
+} else if (isUrl(m.text)) {
+bvl = `\`\`\`「 Detect Link 」\`\`\`\n\nAdmin telah mengirim link, admin dibebaskan untuk mengirim link apapun`
+if (isAdmins) return m.reply(bvl)
+if (m.key.fromMe) return m.reply(bvl)
+if (isCreator) return m.reply(bvl)
+kice = m.sender
+await mans.groupParticipantsUpdate(m.chat, [kice], 'remove').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
+mans.sendMessage(from, {text:`\`\`\`「 Detect Link 」\`\`\`\n\n@${kice.split("@")[0]} Telah dikick karena send link di group ini`, contextInfo:{mentionedJid:[kice]}}, {quoted:m})
+} else {
+}
+}
+
 // Public & Self
 if (!mans.public) {
 if (!m.key.fromMe) return
@@ -155,6 +223,15 @@ _Script By MyMans APIs - X - ZackMans Official_
 
 Library : Baileys - Multi Device
 
+PROFILE BOT :
+-> Owner : ${owner.length}
+-> Rakyat : ${rkyt.length}
+
+PROFILE GROUP :
+-> Antilink : ${AntiLink? "on" : "off"}
+-> Autorevoke : ${GcRvk? "on" : "off"}
+-> Welcome : ${welcm? "on" : "off"}
+
 ▸ GROUP CHAT
 linkgroup <undefined>
 setppgc <image>
@@ -165,6 +242,9 @@ hidetag <query>
 tagall <query>
 promote <query>
 demote <query>
+antilink <on/off>
+welcome <on/off>
+autorevoke <on/off>
 add <query>
 kick <query>
 revoke <undefined>
@@ -181,7 +261,11 @@ mp4 <query>
 ▸ SEARCH
 gimage <query>
 ytsearch <query>
+searchgc <query>
 play <query>
+happymod <query>
+servermc <undefined>
+mcpedl <query>
 google <query>
 pinterest <query>
 
@@ -203,6 +287,8 @@ nulis <query>
 kalkulator <query>
 quoted <query>
 join <query>
+fliptext <query>
+tohuruf <query>
 volume <quer>
 bass <query>
 tempo <query>
@@ -210,45 +296,35 @@ translate <query>
 
 ▸ OTHER
 owner <undefined>
+mcserver <query>
 sc <undefined>
 ping <undefined>
 infochat <query>
+request <query>
+report <query>
+listonline <undefined>
 
 ▸ OWNER
 self <undefined>
 public <undefined>
 bcall <query>
 bcgroup <query>
+chat <query>
+antitag <query>
+ban <add/del>
+cowner <add/del>
 > / => / $
 
 THANKS TO :
-adiwajshing, MhankBarBar, Nurutomo, MyMans APIs - X - ZackMans Official, Dika Ardnt, Heroku, Replit, Railway, Termux, Rest APIs, Penyedia Module, Mastah Lainya
+adiwajshing, MhankBarBar, Nurutomo, MyMans APIs - X - ZackMans Official, Dika Ardnt, Ariffb, BochilGaming, Heroku, Replit, Railway, Termux, Rest APIs, Penyedia Module, Mastah Lainya
 
 ${jangwak}`
 const qtod = m.quoted? "true":"false"
 
-const sendOrder = async(jid, text, orid, img, itcount, title, sellers, tokens, ammount) => {
-const order = generateWAMessageFromContent(jid, proto.Message.fromObject({
- "orderMessage": {
-"orderId": orid, // Ganti Idnya
-"thumbnail": img, // Ganti Imagenya
-"itemCount": itcount, // Ganti Item Countnya
-"status": "INQUIRY", // Jangan Diganti
-"surface": "CATALOG", // Jangan Diganti
-"orderTitle": title, // Ganti Titlenya
-"message": text, // Ganti Messagenya
-"sellerJid": sellers, // Ganti sellernya
-"token": tokens, // Ganti tokenya
-"totalAmount1000": ammount, // Ganti Total Amountnya
-"totalCurrencyCode": "IDR", // Terserah
-}
-}), { userJid: jid })
-mans.relayMessage(jid, order.message, { messageId: order.key.id})
-}
-
 // Case Nye Sini Ngab
 switch(command) {
 case 'menu': case 'help': {
+if (isBan) return m.reply(mess.ban)
 let message = await prepareWAMessageMedia({ video: fs.readFileSync('./media/video/mans.mp4'), gifPlayback:true, jpegThumbnail:global.log0 }, { upload: mans.waUploadToServer })
 const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
 templateMessage: {
@@ -288,7 +364,328 @@ id: 'sc'
 mans.relayMessage(m.chat, template.message, { messageId: template.key.id })
 }
 break
+case 'fliptext': {
+if (isBan) return m.reply(mess.ban)
+if (args.length < 1) return m.reply(`Example:\n${prefix}fliptext MyMans`)
+quere = args.join(" ")
+flipe = quere.split('').reverse().join('')
+m.reply(`\`\`\`「 FLIP TEXT 」\`\`\`\n*•> Normal :*\n${quere}\n*•> Flip :*\n${flipe}`)
+}
+break
+case 'tohuruf': {
+if (isBan) return m.reply(mess.ban)
+if (!Number(args[0])) return m.reply(`Example:\n${prefix}tohuruf 456`)
+try {
+quere = args.join(" ")
+convertes = await toHur(quere)
+m.reply(`\`\`\`「 ALPHABET 」\`\`\`\n*•> Number :*\n${quere}\n*•> Alphabet :*\n${convertes}`)
+} catch {
+m.reply("Error")
+}
+}
+break
+case 'welcome': {
+if (isBan) return m.reply(mess.ban)
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
+if (args.length < 1) return m.reply('ketik on untuk mengaktifkan\nketik off untuk menonaktifkan')
+if (args[0] === "on") {
+if (welcm) return m.reply('Sudah Aktif')
+wlcm.push(from)
+m.reply('Succes menyalakan welcome di group ini')
+} else if (args[0] === "off") {
+if (!welcm) return m.reply('Sudah Mati')
+let off = wlcm.indexOf(from)
+wlcm.splice(off, 1)
+m.reply('Succes mematikan welcome di group ini')
+} else {
+m.reply('on untuk mengaktifkan, off untuk menonaktifkan')
+}
+}
+break
+case 'autorevoke': {
+if (isBan) return m.reply(mess.ban)
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
+if (args.length < 1) return m.reply('ketik on untuk mengaktifkan\nketik off untuk menonaktifkan')
+if (args[0] === "on") {
+if (GcRvk) return m.reply('Sudah Aktif')
+gcrevoke.push(from)
+m.reply('Succes menyalakan autorevoke di group ini')
+} else if (args[0] === "off") {
+if (!GcRvk) return m.reply('Sudah Mati')
+let off = wlcm.indexOf(from)
+gcrevoke.splice(off, 1)
+m.reply('Succes mematikan autorevoke di group ini')
+} else {
+m.reply('on untuk mengaktifkan, off untuk menonaktifkan')
+}
+}
+break
+case 'antilink': {
+if (isBan) return m.reply(mess.ban)
+if (!m.isGroup) return m.reply(mess.group)
+if (!isBotAdmins) return m.reply(mess.botAdmin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
+if (args.length < 1) return m.reply('ketik on untuk mengaktifkan\nketik off untuk menonaktifkan')
+if (args[0] === "on") {
+if (AntiLink) return m.reply('Sudah Aktif')
+ntilink.push(from)
+m.reply('Succes menyalakan antilink di group ini')
+var groupe = await mans.groupMetadata(from)
+var members = groupe['participants']
+var mems = []
+members.map(async adm => {
+mems.push(adm.id.replace('c.us', 's.whatsapp.net'))
+})
+mans.sendMessage(from, {text: `PERINGATAN!!! jika bukan admin jangan send link di group ini`, contextInfo: { mentionedJid : mems }}, {quoted:m})
+} else if (args[0] === "off") {
+if (!AntiLink) return m.reply('Sudah Mati')
+let off = ntilink.indexOf(from)
+ntilink.splice(off, 1)
+m.reply('Succes mematikan antilink di group ini')
+} else {
+m.reply('on untuk mengaktifkan, off untuk menonaktifkan')
+}
+}
+break
+case 'listonline': case 'listaktif': {
+if (isBan) return m.reply(mess.ban)
+if (!m.isGroup) return m.reply(mess.group)
+let id = args && /\d+\-\d+@g.us/.test(args[0]) ? args[0] : m.chat
+let online = [...Object.keys(store.presences[id]), botNumber]
+mans.sendText(m.chat, '*| LIST ONLINE |*\n\n' + online.map(v => '⭔ @' + v.replace(/@.+/, '')).join`\n`, m, { mentions: online })
+}
+break
+case 'chat': {
+if (!isCreator) return m.reply(mess.owner)
+if (!args.join(" ")) return m.reply(`Example :\n${prefix + command} 62813xxxx|Woi`)
+const cpes = args.join(" ")
+const nony = cpes.split("|")[0];
+const pesny = cpes.split("|")[1];
+lolh = `*| CHAT FITUR |*
+
+Pesan dari admin bot
+Nomor : @${m.sender.split("@")[0]}
+Pesan : ${pesny}`
+mans.sendMessage(nony + "@s.whatsapp.net", {text:lolh, mentions:[m.sender]}, {quoted:m})
+}
+await m.reply("Succes")
+break
+case 'cowner': {
+if (isBan) return m.reply(mess.ban)
+if (!isCreator) return m.reply(mess.owner)
+if (!args[0]) return m.reply(`Pilih add atau del`)
+if (args[1]) {
+orgnye = args[1]
+} else if (m.quoted) {
+orgnye = m.quoted.sender.split("@")[0]
+}
+const isCwner = owner.includes(orgnye)
+if (args[0] === "add") {
+if (isCwner) return m.reply('User sudah menjadi owner')
+owner.push(orgnye)
+m.reply(`Succes add friends`)
+} else if (args[0] === "del") {
+if (!isCwner) return m.reply('User bukan owner')
+let delcwner = owner.indexOf(orgnye)
+owner.splice(delcwner, 1)
+m.reply(`Succes del friends`)
+} else {
+m.reply("Error")
+}
+}
+break
+case 'ban': {
+if (isBan) return m.reply(mess.ban)
+if (!isCreator) return m.reply(mess.owner)
+if (!args[0]) return m.reply(`Pilih add atau del`)
+if (args[1]) {
+orgnye = args[1] + "@s.whatsapp.net"
+} else if (m.quoted) {
+orgnye = m.quoted.sender
+}
+const isBane = banUser.includes(orgnye)
+if (args[0] === "add") {
+if (isBane) return m.reply('User sudah dibanned')
+banUser.push(orgnye)
+m.reply(`Succes ban`)
+} else if (args[0] === "del") {
+if (!isBane) return m.reply('User tidak dibanned')
+let delbans = banUser.indexOf(orgnye)
+banUser.splice(delbans, 1)
+m.reply(`Succes delban`)
+} else {
+m.reply("Error")
+}
+}
+break
+case 'request': {
+if (isBan) return m.reply(mess.ban)
+if (!args.join(" ")) return m.reply(`Example : ${prefix + command} min tambahin fitur downloader`)
+teks = `*| REQUEST FITUR |*`
+teks1 = `\n\nNomor : @${m.sender.split("@")[0]}\nRequest : ${args.join(" ")}`
+teks2 = `\n\nSucces send to owner`
+for (let i of owner) {
+mans.sendMessage(i + "@s.whatsapp.net", {text: teks + teks1, mentions:[m.sender]}, {quoted:m})
+}
+mans.sendMessage(m.chat, {text: teks + teks2 + teks1, mentions:[m.sender]}, {quoted:m})
+}
+break
+case 'report': {
+if (isBan) return m.reply(mess.ban)
+if (!args.join(" ")) return m.reply(`Example : \n- ${prefix + command} fitur ig error min\n- ${prefix + command} user ini nyepam min`)
+teks = `*| REPORT FITUR |*`
+teks1 = `\n\nNomor : @${m.sender.split("@")[0]}\nReport : ${args.join(" ")}`
+teks2 = `\n\nSucces send to owner`
+for (let i of owner) {
+mans.sendMessage(i + "@s.whatsapp.net", {text: teks + teks1, mentions:[m.sender]}, {quoted:m})
+}
+mans.sendMessage(m.chat, {text: teks + teks2 + teks1, mentions:[m.sender]}, {quoted:m})
+}
+break
+case 'mcserver': case 'mcquery': {
+if (isBan) return m.reply(mess.ban)
+if (!args.join(" ")) return m.reply(`Example : \n${prefix + command} ip|port\nUses : \n${prefix + command} play.zackmans.com|19132`)
+const Query = require("minecraft-query");
+
+const qury = args.join(" ")
+const iphost = qury.split("|")[0];
+const portnya = qury.split("|")[1];
+
+if (!iphost) return m.reply("ipnya mana kak?")
+if (!portnya) return m.reply("portnya mana kak?")
+
+const q = new Query({host: iphost, port: portnya, timeout: 7500});
+
+q.fullStat()
+.then(success => {
+m.reply(jsonformat(success));
+return q.basicStat()
+})
+.then(success => {
+m.reply(jsonformat(success));
+q.close();
+})
+}
+break
+case 'mcpedl': {
+if (isBan) return m.reply(mess.ban)
+if (!args.join(" ")) return m.reply(`Example : ${prefix + command} shader`)
+yogipw.mcpedl(args.join(" ")).then(async(res) => {
+teks = `*| MCPEDL SEARCH |*`
+for (let i of res) {
+teks += `\n\nName : ${i.name}\nCategory : ${i.category}\nDate : ${i.date}\nDesc : ${i.desc}\nLink : ${i.link}`
+}
+let buttons = [
+{buttonId: `menu`, buttonText: {displayText: 'Menu'}, type: 1}
+]
+let buttonMessage = {
+image: log0,
+jpegThumbnail: thum,
+caption: teks,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4
+}
+mans.sendMessage(m.chat, buttonMessage, { quoted: m })
+})
+}
+break
+case 'happymod': {
+if (isBan) return m.reply(mess.ban)
+if (!args.join(" ")) return m.reply(`Example : ${prefix + command} mobile legend`)
+yogipw.happymod(args.join(" ")).then(async(res) => {
+teks = '```「 HappyMod Search 」```'
+for (let i of res) {
+teks += `\n\n${i.name}\n`
+teks += `${i.link}`
+}
+let buttons = [
+{buttonId: `menu`, buttonText: {displayText: 'Menu'}, type: 1}
+]
+let buttonMessage = {
+image: {url:res[0].icon},
+jpegThumbnail: thum,
+caption: teks,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4
+}
+mans.sendMessage(m.chat, buttonMessage, { quoted: m })
+})
+}
+break
+case 'searchgc': {
+if (isBan) return m.reply(mess.ban)
+if (args.length < 1) return m.reply(`Example :\n${prefix}searchgc Editor Berkelas`)
+nae = args.join(" ")
+hx.linkwa(nae).then(res => {
+teks = '```「 Search Group 」```'
+for (let i of res) {
+teks += `\n\n•> Group Whatsapp :\n`
+teks += `${i.link}\n`
+teks += `${i.nama}`
+}
+let buttons = [
+{buttonId: `menu`, buttonText: {displayText: 'Menu'}, type: 1}
+]
+let buttonMessage = {
+image: log0,
+jpegThumbnail: thum,
+caption: teks,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4
+}
+mans.sendMessage(m.chat, buttonMessage, { quoted: m })
+})
+}
+break
+case 'servermc': {
+if (isBan) return m.reply(mess.ban)
+yogipw.servermc().then(async(res) => {
+let teks = '*| SERVER MC INDONESIA |*\n\nhttps://minecraftpocket-servers.com/country/indonesia/\n\n'
+let no = 1
+for (let i of res) {
+teks += `▸ Server Ke ${no++}\nip : ${i.ip}\nport : ${i.port}\nversi : ${i.versi}\nplayer : ${i.player}\n\n`
+}
+let buttons = [
+{buttonId: `menu`, buttonText: {displayText: 'Menu'}, type: 1}
+]
+let buttonMessage = {
+image: log0,
+jpegThumbnail: thum,
+caption: teks,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4
+}
+mans.sendMessage(m.chat, buttonMessage, { quoted: m })
+})
+}
+break
+case 'antitag': {
+if (isBan) return m.reply(mess.ban)
+if (!isCreator) return
+if (args.length < 1) return m.reply(`Ketik on untuk mengaktifkan\nKetik off untuk menonaktifkan`)
+if (args[0] === 'on') {
+if (antitags === true) return
+global.antitags = true
+m.reply(`Berhasil mengaktifkan antitag!`)
+} else if (args[0] === 'off') {
+if (antitags === false) return
+global.antitags = false
+m.reply(`Berhasil menonaktifkan antitag!`)
+} else {
+m.reply('Pilih on atau off')
+}
+}
+break
 case 'yts': case 'ytsearch': {
+if (isBan) return m.reply(mess.ban)
 if (!args.join(" ")) return m.reply(`Example : ${prefix + command} dj 30 detik`)
 let yts = require("yt-search")
 let search = await yts(args.join(" "))
@@ -301,6 +698,7 @@ mans.sendMessage(m.chat, { image: { url: search.all[0].thumbnail },  caption: te
 }
 break
 case 'infochat': {
+if (isBan) return m.reply(mess.ban)
 if (!m.quoted) m.reply('Reply Pesan')
 let msg = await m.getQuotedObj()
 if (!m.quoted.isBaileys) return m.reply('Pesan tersebut bukan dikirim oleh bot!')
@@ -316,22 +714,25 @@ mans.sendTextWithMentions(m.chat, teks, m)
 }
 break
 case 'setname': case 'setsubject': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!isBotAdmins) return m.reply(mess.botAdmin)
-if (!isAdmins) return m.reply(mess.admin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
 if (!text) return m.reply('Text ?')
 await mans.groupUpdateSubject(m.chat, text).then((res) => m.reply(mess.success)).catch((err) => m.reply(jsonformat(err)))
 }
 break
 case 'setdesc': case 'setdesk': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!isBotAdmins) return m.reply(mess.botAdmin)
-if (!isAdmins) return m.reply(mess.admin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
 if (!text) return m.reply('Text ?')
 await mans.groupUpdateDescription(m.chat, text).then((res) => m.reply(mess.success)).catch((err) => m.reply(jsonformat(err)))
 }
 break
 case 'setppbot': {
+if (isBan) return m.reply(mess.ban)
 if (!isCreator) return m.reply(mess.owner)
 if (!quoted) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
 if (!/image/.test(mime)) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
@@ -342,8 +743,9 @@ m.reply(mess.success)
 }
 break
 case 'setppgroup': case 'setppgrup': case 'setppgc': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
-if (!isAdmins) return m.reply(mess.admin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
 if (!quoted) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
 if (!/image/.test(mime)) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
 if (/webp/.test(mime)) return m.reply(`Kirim/Reply Image Dengan Caption ${prefix + command}`)
@@ -353,12 +755,12 @@ m.reply(mess.success)
 }
 break
 case 'tagall': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
-if (!isBotAdmins) return m.reply(mess.botAdmin)
-if (!isAdmins) return m.reply(mess.admin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
 let teks = `══✪〘 *👥 Tag All* 〙✪══
  
- ➲ *Pesan : ${q ? q : 'kosong'}*\n\n`
+ ➲ *Pesan : ${args.join(" ") ? args.join(" ") : 'kosong'}*\n\n`
 for (let mem of participants) {
 teks += `⭔ @${mem.id.split('@')[0]}\n`
 }
@@ -366,13 +768,14 @@ mans.sendMessage(m.chat, { text: teks, mentions: participants.map(a => a.id) }, 
 }
 break
 case 'hidetag': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
-if (!isBotAdmins) return m.reply(mess.botAdmin)
-if (!isAdmins) return m.reply(mess.admin)
-mans.sendMessage(m.chat, { text : q ? q : '' , mentions: participants.map(a => a.id)}, { quoted: m })
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
+mans.sendMessage(m.chat, { text : args.join(" ") ? args.join(" ") : '' , mentions: participants.map(a => a.id)}, { quoted: m })
 }
 break
 case 'linkgroup': case 'linkgc': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 let response = await mans.groupInviteCode(m.chat)
 mans.sendMessage(m.chat, {text:`Link Group ${groupMetadata.subject} : \nhttps://chat.whatsapp.com/${response}l`, "contextInfo": {
@@ -392,6 +795,7 @@ sendEphemeral: true,
 }
 break
 case 'revoke': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!isBotAdmins) return m.reply(mess.botAdmin)
 if (!isAdmins && !isCreator) return m.reply(mess.admin)
@@ -399,9 +803,10 @@ mans.groupRevokeInvite(m.chat)
 }
 break
 case 'ephemeral': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!isBotAdmins) return m.reply(mess.botAdmin)
-if (!isAdmins) return m.reply(mess.admin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
 if (!args[0]) return m.reply('Masukkan value enable/disable')
 if (args[0] === 'enable') {
 await mans.sendMessage(m.chat, { disappearingMessagesInChat: WA_DEFAULT_EPHEMERAL }).then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
@@ -411,9 +816,10 @@ await mans.sendMessage(m.chat, { disappearingMessagesInChat: false }).then((res)
 }
 break
 case 'editinfo': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!isBotAdmins) return m.reply(mess.botAdmin)
-if (!isAdmins) return m.reply(mess.admin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
 if (args[0] === 'open'){
 await mans.groupSettingUpdate(m.chat, 'unlocked').then((res) => m.reply(`Sukses Membuka Edit Info Group`)).catch((err) => m.reply(jsonformat(err)))
 } else if (args[0] === 'close'){
@@ -436,9 +842,10 @@ mans.sendMessage(m.chat, buttonMessage, { quoted: m })
 }
 break
 case 'group': case 'grup': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!isBotAdmins) return m.reply(mess.botAdmin)
-if (!isAdmins) return m.reply(mess.admin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
 if (args[0] === 'close'){
 await mans.groupSettingUpdate(m.chat, 'announcement').then((res) => m.reply(`Sukses Menutup Group`)).catch((err) => m.reply(jsonformat(err)))
 } else if (args[0] === 'open'){
@@ -461,38 +868,43 @@ mans.sendMessage(m.chat, buttonMessage, { quoted: m })
 }
 break
 case 'promote': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!isBotAdmins) return m.reply(mess.botAdmin)
-if (!isAdmins) return m.reply(mess.admin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
 let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
 await mans.groupParticipantsUpdate(m.chat, [users], 'promote').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
 }
 break
 case 'demote': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!isBotAdmins) return m.reply(mess.botAdmin)
-if (!isAdmins) return m.reply(mess.admin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
 let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
 await mans.groupParticipantsUpdate(m.chat, [users], 'demote').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
 }
 break
 case 'kick': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!isBotAdmins) return m.reply(mess.botAdmin)
-if (!isAdmins) return m.reply(mess.admin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
 let users = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
 await mans.groupParticipantsUpdate(m.chat, [users], 'remove').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
 }
 break
 case 'add': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!isBotAdmins) return m.reply(mess.botAdmin)
-if (!isAdmins) return m.reply(mess.admin)
+if (!isAdmins && !isCreator) return m.reply(mess.admin)
 let users = m.quoted ? m.quoted.sender : text.replace(/[^0-9]/g, '')+'@s.whatsapp.net'
 await mans.groupParticipantsUpdate(m.chat, [users], 'add').then((res) => m.reply(jsonformat(res))).catch((err) => m.reply(jsonformat(err)))
 }
 break
 case 'bcgc': case 'bcgroup': {
+if (isBan) return m.reply(mess.ban)
 if (!isCreator) return m.reply(mess.owner)
 if (!args.join(" ")) return m.reply(`Text mana?\n\nExample : ${prefix + command} ZackMans Official`)
 let getGroups = await mans.groupFetchAllParticipating()
@@ -534,6 +946,7 @@ m.reply(`Sukses Mengirim Broadcast Ke ${anu.length} Group`)
 }
 break
 case 'bc': case 'broadcast': case 'bcall': {
+if (isBan) return m.reply(mess.ban)
 if (!isCreator) return m.reply(mess.owner)
 if (!args.join(" ")) return m.reply(`Text mana?\n\nExample : ${prefix + command} ZackMans Official`)
 let anu = await store.chats.all().map(v => v.id)
@@ -573,6 +986,7 @@ m.reply('Sukses Broadcast')
 }
 break
 case 'sc': case 'script': {
+if (isBan) return m.reply(mess.ban)
 m.reply('Script : https://github.com/ZackMans/ZackBotMans/\n\nDonate : 6281385062956 (Dana, Gopay)\n\n Dont Forget Donate')
 }
 break
@@ -611,10 +1025,15 @@ mans.sendFile(m.chat, pp, "", m, { caption: bteks, mentions: await mans.parseMen
 break
 */
 case 'join': {
+if (isBan) return m.reply(mess.ban)
 if (!args[0]) return m.reply("Linknya mana kak?")
 vdd = args[0]
 let vcc = vdd.split("https://chat.whatsapp.com/")[1]
 if (!vcc) return m.reply("Link invalid!")
+if (isCreator) {
+await mans.groupAcceptInvite(vcc).then(async(res) => m.reply(jsonformat(res))).catch(_ => _)
+m.reply("Succes")
+} else {
 mans.query({
 tag: "iq",
 attrs: {
@@ -636,8 +1055,10 @@ m.reply("Error")
 }
 }).catch(_ => _)
 }
+}
 break
 case 'volume': {
+if (isBan) return m.reply(mess.ban)
 if (!args.join(" ")) return m.reply(`Example: ${prefix + command} 10`)
 media = await mans.downloadAndSaveMediaMessage(quoted, "volume")
 if (isQuotedAudio) {
@@ -664,6 +1085,7 @@ m.reply("Kirim video/audio")
 }
 break
 case 'tempo': {
+if (isBan) return m.reply(mess.ban)
 if (!args.join(" ")) return m.reply(`Example: ${prefix + command} 10`)
 var req = args.join(' ')
 media = await mans.downloadAndSaveMediaMessage(quoted, "tempo")
@@ -691,6 +1113,7 @@ m.reply("Kirim video/audio")
 }
 break
 case 'bass': {
+if (isBan) return m.reply(mess.ban)
 if (!args.join(" ")) return m.reply(`Example: ${prefix + command} 10`)
 var req = args.join(' ')
 media = await mans.downloadAndSaveMediaMessage(quoted, "bass")
@@ -718,6 +1141,7 @@ m.reply("Kirim video/audio")
 }
 break
 case 'nulis': {
+if (isBan) return m.reply(mess.ban)
 if (args.length < 1) return m.reply(`Example :\n${prefix}nulis MyMainas|91|#ff020a|Manusia terganteng adalah salman alfarizi`)
 const nls = args.join(" ")
 const nams = "Nama : " + nls.split("|")[0];
@@ -794,6 +1218,7 @@ exec(`npm i marker`)
 }
 break
 case 'kalkulator': case 'kal': {
+if (isBan) return m.reply(mess.ban)
 if (args.length < 1) return m.reply(`*Example :*\n${prefix}kalkulator 2 * 5\n\n*List Bilangan :*\n•> Kali : *\n•> Bagi : /\n•> Tambah : +\n•> Kurang : -`)
 let qsd = args.join(" ")
 if (typeof mathjs.evaluate(qsd) !== 'number') {
@@ -804,18 +1229,23 @@ m.reply(`\`\`\`「 Kalkulator 」\`\`\`\n\n*•> Hitung :* ${qsd}\n*•> Hasil :
 }
 break
 case 'public': {
+if (isBan) return m.reply(mess.ban)
 if (!isCreator) return m.reply(mess.owner)
 mans.public = true
 m.reply('Sukse Change To Public Usage')
+mans.setStatus(`Mode : Public`)
 }
 break
 case 'self': {
+if (isBan) return m.reply(mess.ban)
 if (!isCreator) return m.reply(mess.owner)
 mans.public = false
 m.reply('Sukses Change To Self Usage')
+mans.setStatus(`Mode : Self`)
 }
 break
 case 'ping': case 'botstatus': case 'statusbot': {
+if (isBan) return m.reply(mess.ban)
 const used = process.memoryUsage()
 const cpus = os.cpus().map(cpu => {
 cpu.total = Object.keys(cpu.times).reduce((last, type) => last + cpu.times[type], 0)
@@ -863,6 +1293,7 @@ m.reply(respon)
 }
 break
 case 'toimage': case 'toimg': {
+if (isBan) return m.reply(mess.ban)
 if (!m.quoted) return m.reply('Reply Image')
 if (!/webp/.test(mime)) return m.reply(`balas stiker dengan caption *${prefix + command}*`)
 m.reply(mess.wait)
@@ -878,6 +1309,7 @@ fs.unlinkSync(ran)
 }
 break
 case 'tomp4': case 'tovideo': {
+if (isBan) return m.reply(mess.ban)
 if (!m.quoted) return m.reply('Reply Image')
 if (!/webp/.test(mime)) return m.reply(`balas stiker dengan caption *${prefix + command}*`)
 m.reply(mess.wait)
@@ -889,6 +1321,7 @@ await fs.unlinkSync(media)
 }
 break
 case 'toaud': case 'toaudio': {
+if (isBan) return m.reply(mess.ban)
 if (!/video/.test(mime) && !/audio/.test(mime)) return m.reply(`Kirim/Reply Video/Audio Yang Ingin Dijadikan Audio Dengan Caption ${prefix + command}`)
 if (!m.quoted) return m.reply(`Kirim/Reply Video/Audio Yang Ingin Dijadikan Audio Dengan Caption ${prefix + command}`)
 m.reply(mess.wait)
@@ -899,6 +1332,7 @@ mans.sendMessage(m.chat, {audio: audio, mimetype: 'audio/mpeg'}, { quoted : m })
 }
 break
 case 'tomp3': {
+if (isBan) return m.reply(mess.ban)
 if (/document/.test(mime)) return m.reply(`Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`)
 if (!/video/.test(mime) && !/audio/.test(mime)) return m.reply(`Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`)
 if (!m.quoted) return m.reply(`Kirim/Reply Video/Audio Yang Ingin Dijadikan MP3 Dengan Caption ${prefix + command}`)
@@ -910,6 +1344,7 @@ mans.sendMessage(m.chat, {document: audio, mimetype: 'audio/mpeg', fileName: `Co
 }
 break
 case 'tovn': case 'toptt': {
+if (isBan) return m.reply(mess.ban)
 if (!/video/.test(mime) && !/audio/.test(mime)) return m.reply(`Reply Video/Audio Yang Ingin Dijadikan VN Dengan Caption ${prefix + command}`)
 if (!m.quoted) return m.reply(`Reply Video/Audio Yang Ingin Dijadikan VN Dengan Caption ${prefix + command}`)
 m.reply(mess.wait)
@@ -920,6 +1355,7 @@ mans.sendMessage(m.chat, {audio: audio, mimetype:'audio/mpeg', ptt:true }, {quot
 }
 break
 case 'togif': {
+if (isBan) return m.reply(mess.ban)
 if (!m.quoted) return m.reply('Reply Image')
 if (!/webp/.test(mime)) return m.reply(`balas stiker dengan caption *${prefix + command}*`)
 m.reply(mess.wait)
@@ -931,6 +1367,7 @@ await fs.unlinkSync(media)
 }
 break
 case 'tourl': {
+if (isBan) return m.reply(mess.ban)
 m.reply(mess.wait)
 let { UploadFileUgu, webp2mp4File, TelegraPh } = require('./lib/uploader')
 let media = await mans.downloadAndSaveMediaMessage(quoted)
@@ -945,6 +1382,7 @@ await fs.unlinkSync(media)
 }
 break
 case 'q': case 'quoted': {
+if (isBan) return m.reply(mess.ban)
 if (!m.quoted) return m.reply('Reply Pesannya!!')
 let wokwol = await mans.serializeM(await m.getQuotedObj())
 if (!wokwol.quoted) return m.reply('Pesan Yang anda reply tidak mengandung reply')
@@ -952,6 +1390,7 @@ await wokwol.quoted.copyNForward(m.chat, true)
 }
 break
 case 'getname': {
+if (isBan) return m.reply(mess.ban)
 if (qtod === "true") {
 namenye = await mans.getName(m.quoted.sender)
 m.reply(namenye)
@@ -961,6 +1400,7 @@ mans.sendMessage(from, {text:"Reply orangnya"}, {quoted:m})
 }
 break
 case 'getpic': {
+if (isBan) return m.reply(mess.ban)
 if (qtod === "true") {
 try {
 pporg = await mans.profilePictureUrl(m.quoted.sender, 'image')
@@ -983,6 +1423,7 @@ mans.sendContact(m.chat, global.owner, m)
 }
 break
 case 'translate': case 'terjemahan': {
+if (isBan) return m.reply(mess.ban)
 if (!args.join(" ")) return m.reply("Textnya?")
 tes = await fetchJson (`https://megayaa.herokuapp.com/api/translate?to=id&kata=${args.join(" ")}`)
 Infoo = tes.info
@@ -991,6 +1432,7 @@ m.reply(`🌐Translate : ${Detek}\n📘Hasil : ${Infoo}`)
 }
 break
 case 'gimage': case 'gig': {
+if (isBan) return m.reply(mess.ban)
 if (!args[0]) return m.reply("Mau cari gambar apa kak?")
 let gis = require('g-i-s')
 gis(args.join(" "), async (error, result) => {
@@ -1014,6 +1456,7 @@ mans.sendMessage(m.chat, buttonMessage, { quoted: m })
 }
 break
 case 'google': {
+if (isBan) return m.reply(mess.ban)
 if (!args[0]) return m.reply(`Example: ${prefix + command} <query>\nUses : ${prefix + command} apa arti cinta`)
 let google = require('google-it')
 google({'query': args.join(" ")}).then(res => {
@@ -1028,6 +1471,7 @@ m.reply(teks)
 }
 break
 case 'pinterest': case 'image': {
+if (isBan) return m.reply(mess.ban)
 if (!args.join(" ")) return m.reply("Mau cari gambar apa kak?")
 try {
 hx.pinterest(args.join(" ")).then(async(res) => {
@@ -1050,6 +1494,7 @@ m.reply("Error")
 }
 break
 case 'igstory': case 'instagramstory': {
+if (isBan) return m.reply(mess.ban)
 if (!args[0]) return m.reply("Usernamenya mana kak?")
 try {
 hx.igstory(args[0]).then(async(res) => {
@@ -1067,6 +1512,7 @@ m.reply("error!")
 }
 break
 case 'igdl': case 'instagram': {
+if (isBan) return m.reply(mess.ban)
 if (!args[0]) return m.reply(mess.linkm)
 try {
 hx.igdl(args[0]).then(async(res) => {
@@ -1084,6 +1530,7 @@ m.reply("Link error!")
 }
 break
 case 'mp4' : {
+if (isBan) return m.reply(mess.ban)
 if (!args[0]) return m.reply("Linknya mana kak?")
 try {
 mans.sendMessage(from, {video:{url:args[0]}, caption:"Succes"}, {quoted:m})
@@ -1093,6 +1540,7 @@ m.reply("Linknya Error")
 }
 break
 case 'jpeg': {
+if (isBan) return m.reply(mess.ban)
 if (!args[0]) return m.reply("Linknya mana kak?")
 try {
 mans.sendMessage(from, {image:{url:args[0]}, caption:"Succes"}, {quoted:m})
@@ -1102,6 +1550,7 @@ m.reply("Linknya Error")
 }
 break
 case 'ttdl': case 'tiktok': case 'ttmp4': case 'ttmp3': case 'tiktoknowm': {
+if (isBan) return m.reply(mess.ban)
 if (!args[0]) return m.reply(mess.linkm)
 try {
 hx.ttdownloader(args[0]).then(async(res) => {
@@ -1127,14 +1576,17 @@ m.reply("Link error!")
 }
 break
 case 'ttvd': {
+if (isBan) return m.reply(mess.ban)
 mans.sendMessage(from, {video:{url:args[0]}, mimetype:" video/mp4", caption:"Succes"}, {quoted:m})
 }
 break
 case 'ttad': {
+if (isBan) return m.reply(mess.ban)
 mans.sendMessage(from, {audio:{url:args[0]}, mimetype:"audio/mp4", ptt:true}, {quoted:m})
 }
 break
 case 'play': case 'ytplay': {
+if (isBan) return m.reply(mess.ban)
 let yts = require("yt-search")
 let search = await yts(text)
 let anu = search.videos[Math.floor(Math.random() * search.videos.length)]
@@ -1163,6 +1615,7 @@ mans.sendMessage(m.chat, buttonMessage, { quoted: m })
 }
 break
 case 'ytdl': case 'yt': case 'youtube': case 'ytmp4': case 'ytmp3': {
+if (isBan) return m.reply(mess.ban)
 if (!args[0]) return m.reply(mess.linkm)
 try {
 hx.youtube(args[0]).then(async(res) => {
@@ -1192,14 +1645,17 @@ m.reply("Linknya Error!")
 }
 break
 case 'ytvd': {
+if (isBan) return m.reply(mess.ban)
 mans.sendMessage(from, {video:{url:args[0]}, mimetype:"video/mp4", caption:"Success"}, {quoted:m})
 }
 break
 case 'ytad': {
+if (isBan) return m.reply(mess.ban)
 mans.sendMessage(from, {audio:{url:args[0]}, mimetype:"audio/mp4", ptt:true}, {quoted:m})
 }
 break
 case 'smeme': case 'smm': {
+if (isBan) return m.reply(mess.ban)
 if (!args.join(" ")) return m.reply("Masukan Textnya!")
 if (/image/.test(mime)) {
 var media = await mans.downloadAndSaveMediaMessage(quoted, "smeme")
@@ -1219,6 +1675,7 @@ m.reply("Kirim foto dengan caption smeme")
 }
 break
 case 'sticker': case 's': {
+if (isBan) return m.reply(mess.ban)
 if (/image/.test(mime)) {
 let media = await quoted.download()
 let encmedia = await mans.sendImageAsSticker(m.chat, media, m, { packname: global.packname, author: global.packname2 })
@@ -1268,6 +1725,27 @@ exec(budy.slice(2), (err, stdout) => {
 if(err) return m.reply(err)
 if (stdout) return m.reply(stdout)
 })
+}
+// Anti Tag ( MyMans APIs )
+const listTag = ["6283155687629@s.whatsapp.net"]
+const partiNum = (m.mtype === 'extendedTextMessage') ? m.message.extendedTextMessage.contextInfo.participant : ''
+// Antitag Via Reply ( MyMans APIs )
+if (listTag.includes(partiNum)) {
+if (antitags === false) return
+if (!m.isGroup) return
+if (m.key.fromMe) return
+sendNye = fs.readFileSync('media/sticker/jantag.webp')
+mans.sendReadReceipt(m.chat, m.sender, [m.key.id])
+mans.sendMessage(from, {sticker:sendNye, contextInfo:{forwardingScore: 800, isForwarded: true}}, {quoted:m})
+}
+// Antitag Via Tag ( MyMans APIs )
+if (budy.includes("@6283155687629")) {
+if (antitags === false) return
+if (!m.isGroup) return
+if (m.key.fromMe) return
+sendNye = fs.readFileSync('media/sticker/jantag.webp')
+mans.sendReadReceipt(m.chat, m.sender, [m.key.id])
+mans.sendMessage(from, {sticker:sendNye, contextInfo:{forwardingScore: 800, isForwarded: true}}, {quoted:m})
 }
 if (isCmd && budy.toLowerCase() != undefined) {
 if (m.chat.endsWith('broadcast')) return
