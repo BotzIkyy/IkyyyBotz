@@ -625,6 +625,7 @@ mcserver <query>
 sc <undefined>
 ping <undefined>
 afk <query>
+cekupdate [UpdateBot]
 delete <query>
 infochat <query>
 request <query>
@@ -694,6 +695,7 @@ mans.relayMessage(m.chat, template.message, { messageId: template.key.id })
 }
 break
 case 'emoji': {
+if (isBan) return m.reply(mess.ban)
 if (!args.join(" ")) return m.reply('emojinya?')
 emoji.get(args.join(" ")).then(async(emoji) => {
 let mese = await mans.sendMessage(m.chat, {image:{url:emoji.images[4].url}, caption:"Done!"}, {quoted:m})
@@ -702,6 +704,7 @@ await mans.sendMessage(from, {text:"s"}, {quoted:mese})
 }
 break
 case 'suitpvp': case 'suit': {
+if (isBan) return m.reply(mess.ban)
 this.suit = this.suit ? this.suit : {}
 let poin = 10
 let poin_lose = 10
@@ -730,6 +733,7 @@ delete this.suit[id]
 }
 break
 case 'family100': {
+if (isBan) return m.reply(mess.ban)
 if ('family100'+m.chat in _family100) {
 m.reply('Masih Ada Sesi Yang Belum Diselesaikan!')
 throw false
@@ -747,6 +751,7 @@ hadiah: 6,
 }
 break
 case 'tebak': {
+if (isBan) return m.reply(mess.ban)
 if (!args.join(" ")) return m.reply(`Example : ${prefix + command} lagu\n\nOption : \n1. lagu\n2. gambar\n3. kata\n4. kalimat\n5. lirik\n6.lontong`)
 if (args[0] === "lagu") {
 if (tebaklagu.hasOwnProperty(m.sender.split('@')[0])) return m.reply("Masih Ada Sesi Yang Belum Diselesaikan!")
@@ -833,6 +838,7 @@ delete caklontong_desk[m.sender.split('@')[0]]
 }
 break
 case 'ttc': case 'ttt': case 'tictactoe': {
+if (isBan) return m.reply(mess.ban)
 let TicTacToe = require("./lib/tictactoe")
 this.game = this.game ? this.game : {}
 if (Object.values(this.game).find(room => room.id.startsWith('tictactoe') && [room.game.playerX, room.game.playerO].includes(m.sender))) return m.reply('Kamu masih didalam game')
@@ -883,6 +889,7 @@ this.game[room.id] = room
 }
 break
 case 'delttc': case 'delttt': {
+if (isBan) return m.reply(mess.ban)
 this.game = this.game ? this.game : {}
 try {
 if (this.game) {
@@ -897,6 +904,7 @@ m.reply('rusak')
 }
 break
 case 'kuismath': case 'math': {
+if (isBan) return m.reply(mess.ban)
 if (kuismath.hasOwnProperty(m.sender.split('@')[0])) return m.reply("Masih Ada Sesi Yang Belum Diselesaikan!")
 let { genMath, modes } = require('./src/math')
 if (!args.join(" ")) return m.reply(`Mode: ${Object.keys(modes).join(' | ')}\nContoh penggunaan: ${prefix}math medium`)
@@ -913,6 +921,7 @@ delete kuismath[m.sender.split('@')[0]]
 }
 break
 case 'delete': case 'del': {
+if (isBan) return m.reply(mess.ban)
 if (!m.quoted) return
 let { chat, fromMe, id, isBaileys } = m.quoted
 if (!isBaileys) return m.reply('Pesan tersebut bukan dikirim oleh bot!')
@@ -920,6 +929,7 @@ mans.sendMessage(m.chat, { delete: { remoteJid: m.chat, fromMe: true, id: m.quot
 }
 break
 case 'halah': case 'hilih': case 'huluh': case 'heleh': case 'holoh': {
+if (isBan) return m.reply(mess.ban)
 if (!m.quoted && !args.join(" ")) return m.reply(`Kirim/reply text dengan caption ${prefix + command}`)
 ter = command[1].toLowerCase()
 tex = m.quoted ? m.quoted.text ? m.quoted.text : args.join(" ") ? args.join(" ") : m.text : args.join(" ") ? args.join(" ") : m.text
@@ -927,6 +937,7 @@ m.reply(tex.replace(/[aiueo]/g, ter).replace(/[AIUEO]/g, ter.toUpperCase()))
 }
 break
 case 'vote': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (m.chat in vote) return m.reply(`_Masih ada vote di chat ini!_\n\n*${prefix}hapusvote* - untuk menghapus vote`)
 if (!args.join(" ")) return m.reply(`Masukkan Alasan Melakukan Vote, Example: *${prefix + command} Owner Ganteng*`)
@@ -971,6 +982,7 @@ mans.sendMessage(m.chat, buttonMessageVote)
 }
 break
 case 'upvote': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!(m.chat in vote)) return m.reply(`_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`)
 isVote = vote[m.chat][1].concat(vote[m.chat][2])
@@ -1015,6 +1027,7 @@ mans.sendMessage(m.chat, buttonMessageUpvote)
 }
 break
 case 'devote': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!(m.chat in vote)) return m.reply(`_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`)
 isVote = vote[m.chat][1].concat(vote[m.chat][2])
@@ -1059,6 +1072,7 @@ mans.sendMessage(m.chat, buttonMessageDevote)
 }
 break
 case 'cekvote': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!(m.chat in vote)) return m.reply(`_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`)
 teks_vote = `*「 VOTE 」*
@@ -1088,6 +1102,7 @@ mans.sendTextWithMentions(m.chat, teks_vote, m)
 }
 break
 case 'deletevote': case'delvote': case 'hapusvote': {
+if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 if (!(m.chat in vote)) return m.reply(`_*tidak ada voting digrup ini!*_\n\n*${prefix}vote* - untuk memulai vote`)
 delete vote[m.chat]
@@ -1095,25 +1110,33 @@ m.reply('Berhasil Menghapus Sesi Vote Di Grup Ini')
 }
 break
 case 'listpc': {
+if (isBan) return m.reply(mess.ban)
 let anu = await store.chats.all().filter(v => v.id.endsWith('.net')).map(v => v)
-let teks = `     「 List Personal Chat 」\n\nThere are ${anu.length} users using bot in personal chat\n\n`
+let teks = `     「 List Personal Chat 」\n\nThere are ${anu.length} users using bot in personal chat`
 for (let i of anu) {
- teks += `Profile : @${i.id.split('@')[0]}\nChat : ${i.unreadCount}\nLastchat : ${moment(i.conversationTimestamp * 1000).tz("Asia/Jakarta").format("DD/MM/YYYY HH:MM:SS")}\n\n`
+ teks += `\n\nProfile : @${i.id.split('@')[0]}\nChat : ${i.unreadCount}\nLastchat : ${moment(i.conversationTimestamp * 1000).tz("Asia/Jakarta").format("DD/MM/YYYY HH:MM:SS")}`
 }
 mans.sendTextWithMentions(m.chat, teks, m)
 }
 break
 case 'listgc': {
+if (isBan) return m.reply(mess.ban)
 let anu = await store.chats.all().filter(v => v.id.endsWith('@g.us')).map(v => v.id)
-let teks = `⬣ *LIST GROUP CHAT*\n\nTotal Group : ${anu.length} Group\n\n`
+let teks = `     「 List Group Chat 」\n\nThere are ${anu.length} users using bot in group chat`
 for (let i of anu) {
  let metadata = await mans.groupMetadata(i)
- teks += `⬡ *Nama :* ${metadata.subject}\n⬡ *Owner :* @${metadata.owner.split('@')[0] ? metadata.owner.split('@')[0] : "undefined"}\n⬡ *ID :* ${metadata.id}\n⬡ *Dibuat :* ${moment(metadata.creation * 1000).tz('Asia/Jakarta').format('DD/MM/YYYY HH:mm:ss')}\n⬡ *Member :* ${metadata.participants.length}\n\n────────────────────────\n\n`
+ if (metadata.owner === "undefined") {
+ loldd = false
+ } else {
+ loldd = metadata.owner
+ }
+ teks += `\n\nName : ${metadata.subject ? metadata.subject : "undefined"}\nOwner : ${loldd ? '@' + loldd.split("@")[0] : "undefined"}\nID : ${metadata.id ? metadata.id : "undefined"}\nDibuat : ${metadata.creation ? moment(metadata.creation * 1000).tz('Asia/Jakarta').format('DD/MM/YYYY HH:mm:ss') : "undefined"}\nMember : ${metadata.participants.length ? metadata.participants.length : "undefined"}`
 }
 mans.sendTextWithMentions(m.chat, teks, m)
 }
 break
 case 'afk': {
+if (isBan) return m.reply(mess.ban)
 let user = global.db.users[m.sender]
 user.afkTime = + new Date
 user.afkReason = args.join(" ")
@@ -1121,6 +1144,7 @@ m.reply(`${m.pushName} sekarang afk\nAlasan : ${args.join(" ") ? args.join(" ") 
 }
 break	
 case 'setcmd': {
+if (isBan) return m.reply(mess.ban)
 if (!m.quoted) return m.reply('Reply Pesan!')
 if (!m.quoted.fileSha256) return m.reply('SHA256 Hash Missing')
 if (!args.join(" ")) return m.reply(`Untuk Command Apa?`)
@@ -1137,6 +1161,7 @@ m.reply(`Done!`)
 }
 break
 case 'delcmd': {
+if (isBan) return m.reply(mess.ban)
 let hash = m.quoted.fileSha256.toString('base64')
 if (!hash) return m.reply(`Tidak ada hash`)
 if (global.db.sticker[hash] && global.db.sticker[hash].locked) return m.reply('You have no permission to delete this sticker command')
@@ -1145,6 +1170,7 @@ m.reply(`Done!`)
 }
 break
 case 'listcmd': {
+if (isBan) return m.reply(mess.ban)
 let teks = `
 *List Hash*
 Info: *bold* hash is Locked
@@ -1154,6 +1180,7 @@ mans.sendText(m.chat, teks, m, { mentions: Object.values(global.db.sticker).map(
 }
 break
 case 'lockcmd': {
+if (isBan) return m.reply(mess.ban)
 if (!isCreator) return m.reply(mess.owner)
 if (!m.quoted) return m.reply('Reply Pesan!')
 if (!m.quoted.fileSha256) return m.reply('SHA256 Hash Missing')
@@ -1164,6 +1191,7 @@ m.reply('Done!')
 }
 break
 case 'addmsg': {
+if (isBan) return m.reply(mess.ban)
 if (!m.quoted) return m.reply('Reply Message Yang Ingin Disave Di Database')
 if (!args.join(" ")) return m.reply(`Example : ${prefix + command} nama file`)
 let msgs = global.db.database
@@ -1177,6 +1205,7 @@ Lihat list Pesan Dengan ${prefix}listmsg`)
 }
 break
 case 'getmsg': {
+if (isBan) return m.reply(mess.ban)
 if (!args.join(" ")) return m.reply(`Example : ${prefix + command} file name\n\nLihat list pesan dengan ${prefix}listmsg`)
 let msgs = global.db.database
 if (!(text.toLowerCase() in msgs)) return m.reply(`'${args.join(" ")}' tidak terdaftar di list pesan`)
@@ -1184,6 +1213,7 @@ mans.copyNForward(m.chat, msgs[text.toLowerCase()], true)
 }
 break
 case 'listmsg': {
+if (isBan) return m.reply(mess.ban)
 let msgs = JSON.parse(fs.readFileSync('./src/database.json'))
 let seplit = Object.entries(global.db.database).map(([nama, isi]) => { return { nama, ...isi } })
 let teks = '「 LIST DATABASE 」\n\n'
@@ -1285,7 +1315,8 @@ if (isBan) return m.reply(mess.ban)
 if (!m.isGroup) return m.reply(mess.group)
 let id = args && /\d+\-\d+@g.us/.test(args[0]) ? args[0] : m.chat
 let online = [...Object.keys(store.presences[id]), botNumber]
-mans.sendText(m.chat, '*| LIST ONLINE |*\n\n' + online.map(v => '⭔ @' + v.replace(/@.+/, '')).join`\n`, m, { mentions: online })
+let liston = 1
+mans.sendText(m.chat, '     「 List Online 」\n\n' + online.map(v => `${liston++} . @` + v.replace(/@.+/, '')).join`\n`, m, { mentions: online })
 }
 break
 case 'chat': {
@@ -1814,7 +1845,7 @@ mans.send5ButImg(yoi, txt, "© MyMans APIs - X - ZackMans Official", log0, btn, 
 m.reply('Sukses Broadcast')
 }
 break
-case 'sc': case 'script': case 'donate': case 'donasi': {
+case 'sc': case 'script': case 'donate': case 'donasi': case 'cekupdate': case 'updatebot': case 'cekbot': case 'sourcecode': {
 if (isBan) return m.reply(mess.ban)
 teks = `Donate MyMans APIs - X - ZackMans Official
 
@@ -1861,12 +1892,12 @@ content: [{ tag: "invite", attrs: { code: coded } }]
 tekse = `     「 Group Link Inspector 」
 ▸ ID : ${res.content[0].attrs.id ? res.content[0].attrs.id : "undefined"}
 ▸ Subject : ${res.content[0].attrs.subject ? res.content[0].attrs.subject : "undefined"}
-▸ Subject update by : @${res.content[0].attrs.s_o.split("@")[0] ? res.content[0].attrs.s_o.split("@")[0] : "undefined"}
+▸ Subject update by : ${res.content[0].attrs.s_o.split("@")[0] ? "@" + res.content[0].attrs.s_o.split("@")[0] : "undefined"}
 ▸ Subject update at : ${res.content[0].attrs.s_t ? moment(res.content[0].attrs.s_t *1000).tz("Asia/Jakarta").format("DD-MM-YYYY, HH:MM:SS") : "undefined"}
-▸ Create by : @${res.content[0].attrs.creator ? res.content[0].attrs.creator.split("@")[0] : "undefined"}
+▸ Create by : ${res.content[0].attrs.creator ? "@" + res.content[0].attrs.creator.split("@")[0] : "undefined"}
 ▸ Create at : ${res.content[0].attrs.creation ? moment(res.content[0].attrs.creation * 1000).tz("Asia/Jakarta").format("DD-MM-YYYY, HH:MM:SS") : "undefined"}
 ▸ Total Members : ${res.content[0].attrs.size ? res.content[0].attrs.size : "undefined"} Members
-▸ Desc update by : @${res.content[0].content[0].attrs.participant ? res.content[0].content[0].attrs.participant.split("@")[0] : "undefined"}
+▸ Desc update by : ${res.content[0].content[0].attrs.participant ? "@" + res.content[0].content[0].attrs.participant.split("@")[0] : "undefined"}
 ▸ Desc update at : ${res.content[0].content[0].attrs.t ? moment(res.content[0].content[0].attrs.t * 1000).tz("Asia/Jakarta").format("DD-MM-YYYY, HH:MM:SS") : "undefined"}
 ▸ Desc id : ${res.content[0].content[0].attrs.id ? res.content[0].content[0].attrs.id : "undefined"}
 ▸ Description : ${res.content[0].content[0].content[0].content ? res.content[0].content[0].content[0].content.toString() : "No Description"}
