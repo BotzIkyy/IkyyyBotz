@@ -1846,33 +1846,32 @@ m.reply('Sukses Broadcast')
 }
 break
 case 'sc': case 'script': case 'donate': case 'donasi': case 'cekupdate': case 'updatebot': case 'cekbot': case 'sourcecode': {
-if (isBan) return m.reply(mess.ban)
-teks = `Donate MyMans APIs - X - ZackMans Official
-
-https://saweria.co/ZackMansOfficial
-6281385062956 (Dana, Gopay)
-
-Dont Forget Donate`
-const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-templateMessage: {
-hydratedTemplate: {
-hydratedContentText: teks,
-hydratedFooterText: "© MyMans APIs - X - ZackMans Official",
-hydratedButtons: [{
-urlButton: {
-displayText: 'Source Code',
-url: "https://github.com/ZackMans/ZackBotMans"
+let zckmn = await fetchJson("https://ZackMans.github.io/database/zackbotmans.json")
+teks = `     「 ZackMans Official 」\n\n${zckmn.saweria}\n${zckmn.donate}`
+for (let i of zckmn.source) {
+teks += `\n\nName : ${i.name}\n${i.link}`
 }
-}, {
-quickReplyButton: {
-displayText: 'Menu',
-id: 'menu'
+teks += `\n\n${zckmn.group}\n\nPassword : ZackMansOfficial\nDont Forget Donate`
+let buttons = [
+{buttonId: `menu`, buttonText: {displayText: 'Menu'}, type: 1}
+]
+let buttonMessage = {
+image: thum,
+jpegThumbnail: log0,
+caption: teks,
+footer: "© " + zckmn.author,
+buttons: buttons,
+headerType: 4,
+contextInfo:{externalAdReply:{
+title:"ZackMans Official Saweria ( Donate )",
+body: "© " + zckmn.author,
+thumbnail: fs.readFileSync("media/image/saweria.jpg"),
+mediaType:1,
+mediaUrl: zckmn.saweria,
+sourceUrl: zckmn.saweria
+}}
 }
-}]
-}
-}
-}), { userJid: m.chat, quoted: m })
-mans.relayMessage(m.chat, template.message, { messageId: template.key.id })
+mans.sendMessage(m.chat, buttonMessage, { quoted: m })
 }
 break
 case 'inspect': {
