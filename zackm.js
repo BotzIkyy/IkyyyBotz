@@ -3,7 +3,6 @@
  - Contact Me on https://wa.me/+6281385062956
  - Follow iG : @salman_alfarizi_15
  - Thanks Dika Ardnt
- tes
 */
 
 require("./config")
@@ -24,8 +23,10 @@ const toHur = require('@develoka/angka-terbilang-js')
 const mathjs = require('mathjs')
 const { performance } = require('perf_hooks')
 const { Primbon } = require('scrape-primbon')
+const { EmojiAPI } = require("emoji-api")
 const imgbbUploader = require('imgbb-uploader')
 const primbon = new Primbon()
+const emoji = new EmojiAPI()
 const { smsg, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom } = require('./lib/myfunc')
 
 // Read Database
@@ -241,22 +242,271 @@ setInterval(() => {
 fs.writeFileSync('./src/database.json', JSON.stringify(global.db, null, 2))
 }, 60 * 1000)
 
+// reset limit every 12 hours
+let cron = require('node-cron')
+cron.schedule('00 12 * * *', () => {
+let user = Object.keys(global.db.users)
+let limitUser = isRakyat ? global.limitawal.rakyat : global.limitawal.free
+for (let jid of user) global.db.users[jid].limit = limitUser
+console.log('Reseted Limit')
+}, {
+scheduled: true,
+timezone: "Asia/Jakarta"
+})
+
+
+if (tebaklagu.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+kuis = true
+jawaban = tebaklagu[m.sender.split('@')[0]]
+if (budy.toLowerCase() == jawaban) {
+await mans.sendButtonText(m.chat, [{ buttonId: 'tebak lagu', buttonText: { displayText: 'Tebak Lagu' }, type: 1 }], `🎮 Tebak Lagu 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, "© MyMans APIs - X - ZackMans Official", m)
+delete tebaklagu[m.sender.split('@')[0]]
+} else m.reply('*Jawaban Salah!*')
+}
+
+if (tebakgambar.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+kuis = true
+jawaban = tebakgambar[m.sender.split('@')[0]]
+if (budy.toLowerCase() == jawaban) {
+await mans.sendButtonText(m.chat, [{ buttonId: 'tebak gambar', buttonText: { displayText: 'Tebak Gambar' }, type: 1 }], `🎮 Tebak Gambar 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, "© MyMans APIs - X - ZackMans Official", m)
+delete tebakgambar[m.sender.split('@')[0]]
+} else m.reply('*Jawaban Salah!*')
+}
+
+if (tebakkata.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+kuis = true
+jawaban = tebakkata[m.sender.split('@')[0]]
+if (budy.toLowerCase() == jawaban) {
+await mans.sendButtonText(m.chat, [{ buttonId: 'tebak kata', buttonText: { displayText: 'Tebak Kata' }, type: 1 }], `🎮 Tebak Kata 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, "© MyMans APIs - X - ZackMans Official", m)
+delete tebakkata[m.sender.split('@')[0]]
+} else m.reply('*Jawaban Salah!*')
+}
+
+if (caklontong.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+kuis = true
+jawaban = caklontong[m.sender.split('@')[0]]
+deskripsi = caklontong_desk[m.sender.split('@')[0]]
+if (budy.toLowerCase() == jawaban) {
+await mans.sendButtonText(m.chat, [{ buttonId: 'tebak lontong', buttonText: { displayText: 'Tebak Lontong' }, type: 1 }], `🎮 Cak Lontong 🎮\n\nJawaban Benar 🎉\n*${deskripsi}*\n\nIngin bermain lagi? tekan button dibawah`, "© MyMans APIs - X - ZackMans Official", m)
+delete caklontong[m.sender.split('@')[0]]
+delete caklontong_desk[m.sender.split('@')[0]]
+} else m.reply('*Jawaban Salah!*')
+}
+
+if (tebakkalimat.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+kuis = true
+jawaban = tebakkalimat[m.sender.split('@')[0]]
+if (budy.toLowerCase() == jawaban) {
+await mans.sendButtonText(m.chat, [{ buttonId: 'tebak kalimat', buttonText: { displayText: 'Tebak Kalimat' }, type: 1 }], `🎮 Tebak Kalimat 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, "© MyMans APIs - X - ZackMans Official", m)
+delete tebakkalimat[m.sender.split('@')[0]]
+} else m.reply('*Jawaban Salah!*')
+}
+
+if (tebaklirik.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+kuis = true
+jawaban = tebaklirik[m.sender.split('@')[0]]
+if (budy.toLowerCase() == jawaban) {
+await mans.sendButtonText(m.chat, [{ buttonId: 'tebak lirik', buttonText: { displayText: 'Tebak Lirik' }, type: 1 }], `🎮 Tebak Lirik 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, "© MyMans APIs - X - ZackMans Official", m)
+delete tebaklirik[m.sender.split('@')[0]]
+} else m.reply('*Jawaban Salah!*')
+}
+
+if (tebaktebakan.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+kuis = true
+jawaban = tebaktebakan[m.sender.split('@')[0]]
+if (budy.toLowerCase() == jawaban) {
+await mans.sendButtonText(m.chat, [{ buttonId: 'tebak tebakan', buttonText: { displayText: 'Tebak Tebakan' }, type: 1 }], `🎮 Tebak Tebakan 🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? tekan button dibawah`, "© MyMans APIs - X - ZackMans Official", m)
+delete tebaktebakan[m.sender.split('@')[0]]
+} else m.reply('*Jawaban Salah!*')
+}
+
+if (('family100'+m.chat in _family100) && isCmd) {
+kuis = true
+let room = _family100['family100'+m.chat]
+let teks = budy.toLowerCase().replace(/[^\w\s\-]+/, '')
+let isSurender = /^((me)?nyerah|surr?ender)$/i.test(m.text)
+if (!isSurender) {
+let index = room.jawaban.findIndex(v => v.toLowerCase().replace(/[^\w\s\-]+/, '') === teks)
+if (room.terjawab[index]) return !0
+room.terjawab[index] = m.sender
+}
+let isWin = room.terjawab.length === room.terjawab.filter(v => v).length
+let caption = `
+Jawablah Pertanyaan Berikut :\n${room.soal}\n\n\nTerdapat ${room.jawaban.length} Jawaban ${room.jawaban.find(v => v.includes(' ')) ? `(beberapa Jawaban Terdapat Spasi)` : ''}
+${isWin ? `Semua Jawaban Terjawab` : isSurender ? 'Menyerah!' : ''}
+${Array.from(room.jawaban, (jawaban, index) => {
+return isSurender || room.terjawab[index] ? `(${index + 1}) ${jawaban} ${room.terjawab[index] ? '@' + room.terjawab[index].split('@')[0] : ''}`.trim() : false
+}).filter(v => v).join('\n')}
+${isSurender ? '' : `Perfect Player`}`.trim()
+mans.sendText(m.chat, caption, m, { contextInfo: { mentionedJid: parseMention(caption) }}).then(mes => { return _family100['family100'+m.chat].pesan = mesg }).catch(_ => _)
+if (isWin || isSurender) delete _family100['family100'+m.chat]
+}
+
+//Suit PvP
+this.suit = this.suit ? this.suit : {}
+let roof = Object.values(this.suit).find(roof => roof.id && roof.status && [roof.p, roof.p2].includes(m.sender))
+if (roof) {
+let win = ''
+let tie = false
+if (m.sender == roof.p2 && /^(acc(ept)?|terima|gas|oke?|tolak|gamau|nanti|ga(k.)?bisa|y)/i.test(m.text) && m.isGroup && roof.status == 'wait') {
+if (/^(tolak|gamau|nanti|n|ga(k.)?bisa)/i.test(m.text)) {
+mans.sendTextWithMentions(m.chat, `@${roof.p2.split`@`[0]} menolak suit, suit dibatalkan`, m)
+delete this.suit[roof.id]
+return !0
+}
+roof.status = 'play'
+roof.asal = m.chat
+clearTimeout(roof.waktu)
+//delete roof[roof.id].waktu
+mans.sendText(m.chat, `Suit telah dikirimkan ke chat
+
+@${roof.p.split`@`[0]} dan 
+@${roof.p2.split`@`[0]}
+
+Silahkan pilih suit di chat masing"
+klik https://wa.me/${botNumber.split`@`[0]}`, m, { mentions: [roof.p, roof.p2] })
+if (!roof.pilih) mans.sendText(roof.p, `Silahkan pilih \n\nBatu🗿\nKertas📄\nGunting✂️`, m)
+if (!roof.pilih2) mans.sendText(roof.p2, `Silahkan pilih \n\nBatu🗿\nKertas📄\nGunting✂️`, m)
+roof.waktu_milih = setTimeout(() => {
+if (!roof.pilih && !roof.pilih2) mans.sendText(m.chat, `Kedua pemain tidak niat main,\nSuit dibatalkan`)
+else if (!roof.pilih || !roof.pilih2) {
+win = !roof.pilih ? roof.p2 : roof.p
+mans.sendTextWithMentions(m.chat, `@${(roof.pilih ? roof.p2 : roof.p).split`@`[0]} tidak memilih suit, game berakhir`, m)
+}
+delete this.suit[roof.id]
+return !0
+}, roof.timeout)
+}
+let jwb = m.sender == roof.p
+let jwb2 = m.sender == roof.p2
+let g = /gunting/i
+let b = /batu/i
+let k = /kertas/i
+let reg = /^(gunting|batu|kertas)/i
+if (jwb && reg.test(m.text) && !roof.pilih && !m.isGroup) {
+roof.pilih = reg.exec(m.text.toLowerCase())[0]
+roof.text = m.text
+m.reply(`Kamu telah memilih ${m.text} ${!roof.pilih2 ? `\n\nMenunggu lawan memilih` : ''}`)
+if (!roof.pilih2) mans.sendText(roof.p2, '_Lawan sudah memilih_\nSekarang giliran kamu', 0)
+}
+if (jwb2 && reg.test(m.text) && !roof.pilih2 && !m.isGroup) {
+roof.pilih2 = reg.exec(m.text.toLowerCase())[0]
+roof.text2 = m.text
+m.reply(`Kamu telah memilih ${m.text} ${!roof.pilih ? `\n\nMenunggu lawan memilih` : ''}`)
+if (!roof.pilih) mans.sendText(roof.p, '_Lawan sudah memilih_\nSekarang giliran kamu', 0)
+}
+let stage = roof.pilih
+let stage2 = roof.pilih2
+if (roof.pilih && roof.pilih2) {
+clearTimeout(roof.waktu_milih)
+if (b.test(stage) && g.test(stage2)) win = roof.p
+else if (b.test(stage) && k.test(stage2)) win = roof.p2
+else if (g.test(stage) && k.test(stage2)) win = roof.p
+else if (g.test(stage) && b.test(stage2)) win = roof.p2
+else if (k.test(stage) && b.test(stage2)) win = roof.p
+else if (k.test(stage) && g.test(stage2)) win = roof.p2
+else if (stage == stage2) tie = true
+mans.sendText(roof.asal, `_*Hasil Suit*_${tie ? '\nSERI' : ''}
+
+@${roof.p.split`@`[0]} (${roof.text}) ${tie ? '' : roof.p == win ? ` Menang \n` : ` Kalah \n`}
+@${roof.p2.split`@`[0]} (${roof.text2}) ${tie ? '' : roof.p2 == win ? ` Menang \n` : ` Kalah \n`}
+`.trim(), m, { mentions: [roof.p, roof.p2] })
+delete this.suit[roof.id]
+}
+}
+
+// Math
+if (kuismath.hasOwnProperty(m.sender.split('@')[0]) && isCmd) {
+kuis = true
+jawaban = kuismath[m.sender.split('@')[0]]
+if (budy.toLowerCase() == jawaban) {
+await m.reply(`🎮 Kuis Matematika  🎮\n\nJawaban Benar 🎉\n\nIngin bermain lagi? kirim ${prefix}math mode`)
+delete kuismath[m.sender.split('@')[0]]
+} else m.reply('*Jawaban Salah!*')
+}
+
+//TicTacToe
+this.game = this.game ? this.game : {}
+let room = Object.values(this.game).find(room => room.id && room.game && room.state && room.id.startsWith('tictactoe') && [room.game.playerX, room.game.playerO].includes(m.sender) && room.state == 'PLAYING')
+if (room) {
+let ok
+let isWin = !1
+let isTie = !1
+let isSurrender = !1
+// m.reply(`[DEBUG]\n${parseInt(m.text)}`)
+if (!/^([1-9]|(me)?nyerah|surr?ender|off|skip)$/i.test(m.text)) return
+isSurrender = !/^[1-9]$/.test(m.text)
+if (m.sender !== room.game.currentTurn) { // nek wayahku
+if (!isSurrender) return !0
+}
+if (!isSurrender && 1 > (ok = room.game.turn(m.sender === room.game.playerO, parseInt(m.text) - 1))) {
+m.reply({
+'-3': 'Game telah berakhir',
+'-2': 'Invalid',
+'-1': 'Posisi Invalid',
+0: 'Posisi Invalid',
+}[ok])
+return !0
+}
+if (m.sender === room.game.winner) isWin = true
+else if (room.game.board === 511) isTie = true
+let arr = room.game.render().map(v => {
+return {
+X: '❌',
+O: '⭕',
+1: '1️⃣',
+2: '2️⃣',
+3: '3️⃣',
+4: '4️⃣',
+5: '5️⃣',
+6: '6️⃣',
+7: '7️⃣',
+8: '8️⃣',
+9: '9️⃣',
+}[v]
+})
+if (isSurrender) {
+room.game._currentTurn = m.sender === room.game.playerX
+isWin = true
+}
+let winner = isSurrender ? room.game.currentTurn : room.game.winner
+let str = `     「 Tictactoe Game 」
+Room ID: ${room.id}
+
+${arr.slice(0, 3).join('')}
+${arr.slice(3, 6).join('')}
+${arr.slice(6).join('')}
+
+${isWin ? `@${winner.split('@')[0]} Menang!` : isTie ? `Game berakhir` : `Giliran ${['❌', '⭕'][1 * room.game._currentTurn]} (@${room.game.currentTurn.split('@')[0]})`}
+❌: @${room.game.playerX.split('@')[0]}
+⭕: @${room.game.playerO.split('@')[0]}
+
+Ketik *nyerah* untuk menyerah dan mengakui kekalahan`
+if ((room.game._currentTurn ^ isSurrender ? room.x : room.o) !== m.chat)
+room[room.game._currentTurn ^ isSurrender ? 'x' : 'o'] = m.chat
+if (room.x !== room.o) await mans.sendText(room.x, str, m, { mentions: parseMention(str) } )
+await mans.sendText(room.o, str, m, { mentions: parseMention(str) } )
+if (isTie || isWin) {
+delete this.game[room.id]
+}
+}
+
 // Respon Cmd with media
 if (isMedia && m.msg.fileSha256 && (m.msg.fileSha256.toString('base64') in global.db.sticker)) {
 let hash = global.db.sticker[m.msg.fileSha256.toString('base64')]
 let { text, mentionedJid } = hash
 let messages = await generateWAMessage(m.chat, { text: text, mentions: mentionedJid }, {
-    userJid: mans.user.id,
-    quoted: m.quoted && m.quoted.fakeObj
+userJid: mans.user.id,
+quoted: m.quoted && m.quoted.fakeObj
 })
 messages.key.fromMe = areJidsSameUser(m.sender, mans.user.id)
 messages.key.id = m.key.id
 messages.pushName = m.pushName
 if (m.isGroup) messages.participant = m.sender
 let msg = {
-    ...chatUpdate,
-    messages: [proto.WebMessageInfo.fromObject(messages)],
-    type: 'append'
+...chatUpdate,
+messages: [proto.WebMessageInfo.fromObject(messages)],
+type: 'append'
 }
 mans.ev.emit('messages.upsert', msg)
 }
@@ -320,6 +570,7 @@ pinterest <query>
 ▸ CONVERT
 sticker <image/video>
 smeme <image>
+emoji <query>
 tomp3 <video>
 tovn <video>
 toaudio <video>
@@ -349,6 +600,12 @@ hilih <query>
 huluh <query>
 heleh <query>
 holoh <query>
+math <query>
+tictactoe <query>
+delttt <query>
+tebak <query>
+family100 <undefined>
+suitpvp <query>
 
 ▸ DATABASE
 setcmd <query>
@@ -389,6 +646,7 @@ cowner <add/del>
 THANKS TO :
 adiwajshing, MhankBarBar, Nurutomo, MyMans APIs - X - ZackMans Official, Dika Ardnt, Ariffb, BochilGaming, Heroku, Replit, Railway, Termux, Rest APIs, Penyedia Module, Mastah Lainya
 
+${ucapanWaktu}
 ${jangwak}`
 const qtod = m.quoted? "true":"false"
 
@@ -433,6 +691,225 @@ id: 'sc'
 }
 }), { userJid: m.chat, quoted: m })
 mans.relayMessage(m.chat, template.message, { messageId: template.key.id })
+}
+break
+case 'emoji': {
+if (!args.join(" ")) return m.reply('emojinya?')
+emoji.get(args.join(" ")).then(async(emoji) => {
+let mese = await mans.sendMessage(m.chat, {image:{url:emoji.images[4].url}, caption:"Done!"}, {quoted:m})
+await mans.sendMessage(from, {text:"s"}, {quoted:mese})
+})
+}
+break
+case 'suitpvp': case 'suit': {
+this.suit = this.suit ? this.suit : {}
+let poin = 10
+let poin_lose = 10
+let timeout = 60000
+if (Object.values(this.suit).find(roof => roof.id.startsWith('suit') && [roof.p, roof.p2].includes(m.sender))) m.reply(`Selesaikan suit mu yang sebelumnya`)
+if (m.mentionedJid[0] === m.sender) return m.reply(`Tidak bisa bermain dengan diri sendiri !`)
+if (!m.mentionedJid[0]) return m.reply(`_Siapa yang ingin kamu tantang?_\nTag orangnya..\n\nContoh : ${prefix}suit @${owner[1]}`, m.chat, { mentions: [owner[1] + '@s.whatsapp.net'] })
+if (Object.values(this.suit).find(roof => roof.id.startsWith('suit') && [roof.p, roof.p2].includes(m.mentionedJid[0]))) throw `Orang yang kamu tantang sedang bermain suit bersama orang lain :(`
+let id = 'suit_' + new Date() * 1
+let caption = `_*SUIT PvP*_
+
+@${m.sender.split`@`[0]} menantang @${m.mentionedJid[0].split`@`[0]} untuk bermain suit
+
+Silahkan @${m.mentionedJid[0].split`@`[0]} untuk ketik terima/tolak`
+this.suit[id] = {
+chat: await mans.sendText(m.chat, caption, m, { mentions: parseMention(caption) }),
+id: id,
+p: m.sender,
+p2: m.mentionedJid[0],
+status: 'wait',
+waktu: setTimeout(() => {
+if (this.suit[id]) mans.sendText(m.chat, `_Waktu suit habis_`, m)
+delete this.suit[id]
+}, 60000), poin, poin_lose, timeout
+}
+}
+break
+case 'family100': {
+if ('family100'+m.chat in _family100) {
+m.reply('Masih Ada Sesi Yang Belum Diselesaikan!')
+throw false
+}
+let anu = await fetchJson('https://raw.githubusercontent.com/BochilTeam/database/master/games/family100.json')
+let random = anu[Math.floor(Math.random() * anu.length)]
+let hasil = `*Jawablah Pertanyaan Berikut :*\n${random.soal}\n\nTerdapat *${random.jawaban.length}* Jawaban ${random.jawaban.find(v => v.includes(' ')) ? `(beberapa Jawaban Terdapat Spasi)` : ''}`.trim()
+_family100['family100'+m.chat] = {
+id: 'family100'+m.chat,
+pesan: await mans.sendText(m.chat, hasil, m),
+...random,
+terjawab: Array.from(random.jawaban, () => false),
+hadiah: 6,
+}
+}
+break
+case 'tebak': {
+if (!args.join(" ")) return m.reply(`Example : ${prefix + command} lagu\n\nOption : \n1. lagu\n2. gambar\n3. kata\n4. kalimat\n5. lirik\n6.lontong`)
+if (args[0] === "lagu") {
+if (tebaklagu.hasOwnProperty(m.sender.split('@')[0])) return m.reply("Masih Ada Sesi Yang Belum Diselesaikan!")
+let anu = await fetchJson('https://fatiharridho.github.io/tebaklagu.json')
+let result = anu[Math.floor(Math.random() * anu.length)]
+let msg = await mans.sendMessage(m.chat, { audio: { url: result.link_song }, mimetype: 'audio/mpeg' }, { quoted: m })
+mans.sendText(m.chat, `Lagu Tersebut Adalah Lagu dari?\n\nArtist : ${result.artist}\nWaktu : 60s`, msg).then(() => {
+tebaklagu[m.sender.split('@')[0]] = result.jawaban.toLowerCase()
+})
+await sleep(60000)
+if (tebaklagu.hasOwnProperty(m.sender.split('@')[0])) {
+console.log("Jawaban: " + result.jawaban)
+mans.sendButtonText(m.chat, [{ buttonId: 'tebak lagu', buttonText: { displayText: 'Tebak Lagu' }, type: 1 }], `Waktu Habis\nJawaban:  ${tebaklagu[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`, "© MyMans APIs - X - ZackMans Official", m)
+delete tebaklagu[m.sender.split('@')[0]]
+}
+} else if (args[0] === 'gambar') {
+if (tebakgambar.hasOwnProperty(m.sender.split('@')[0])) return m.reply("Masih Ada Sesi Yang Belum Diselesaikan!")
+let anu = await fetchJson('https://raw.githubusercontent.com/BochilTeam/database/master/games/tebakgambar.json')
+let result = anu[Math.floor(Math.random() * anu.length)]
+mans.sendImage(m.chat, result.img, `Silahkan Jawab Soal Di Atas Ini\n\nDeskripsi : ${result.deskripsi}\nWaktu : 60s`, m).then(() => {
+tebakgambar[m.sender.split('@')[0]] = result.jawaban.toLowerCase()
+})
+await sleep(60000)
+if (tebakgambar.hasOwnProperty(m.sender.split('@')[0])) {
+console.log("Jawaban: " + result.jawaban)
+mans.sendButtonText(m.chat, [{ buttonId: 'tebak gambar', buttonText: { displayText: 'Tebak Gambar' }, type: 1 }], `Waktu Habis\nJawaban:  ${tebakgambar[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`,"© MyMans APIs - X - ZackMans Official", m)
+delete tebakgambar[m.sender.split('@')[0]]
+}
+} else if (args[0] === 'kata') {
+if (tebakkata.hasOwnProperty(m.sender.split('@')[0])) return m.reply("Masih Ada Sesi Yang Belum Diselesaikan!")
+let anu = await fetchJson('https://raw.githubusercontent.com/BochilTeam/database/master/games/tebakkata.json')
+let result = anu[Math.floor(Math.random() * anu.length)]
+mans.sendText(m.chat, `Silahkan Jawab Pertanyaan Berikut\n\n${result.soal}\nWaktu : 60s`, m).then(() => {
+tebakkata[m.sender.split('@')[0]] = result.jawaban.toLowerCase()
+})
+await sleep(60000)
+if (tebakkata.hasOwnProperty(m.sender.split('@')[0])) {
+console.log("Jawaban: " + result.jawaban)
+mans.sendButtonText(m.chat, [{ buttonId: 'tebak kata', buttonText: { displayText: 'Tebak Kata' }, type: 1 }], `Waktu Habis\nJawaban:  ${tebakkata[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`, "© MyMans APIs - X - ZackMans Official", m)
+delete tebakkata[m.sender.split('@')[0]]
+}
+} else if (args[0] === 'kalimat') {
+if (tebakkalimat.hasOwnProperty(m.sender.split('@')[0])) return m.reply("Masih Ada Sesi Yang Belum Diselesaikan!")
+let anu = await fetchJson('https://raw.githubusercontent.com/BochilTeam/database/master/games/tebakkalimat.json')
+let result = anu[Math.floor(Math.random() * anu.length)]
+mans.sendText(m.chat, `Silahkan Jawab Pertanyaan Berikut\n\n${result.soal}\nWaktu : 60s`, m).then(() => {
+tebakkalimat[m.sender.split('@')[0]] = result.jawaban.toLowerCase()
+})
+await sleep(60000)
+if (tebakkalimat.hasOwnProperty(m.sender.split('@')[0])) {
+console.log("Jawaban: " + result.jawaban)
+mans.sendButtonText(m.chat, [{ buttonId: 'tebak kalimat', buttonText: { displayText: 'Tebak Kalimat' }, type: 1 }], `Waktu Habis\nJawaban:  ${tebakkalimat[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`, "© MyMans APIs - X - ZackMans Official", m)
+delete tebakkalimat[m.sender.split('@')[0]]
+}
+} else if (args[0] === 'lirik') {
+if (tebaklirik.hasOwnProperty(m.sender.split('@')[0])) return m.reply("Masih Ada Sesi Yang Belum Diselesaikan!")
+let anu = await fetchJson('https://raw.githubusercontent.com/BochilTeam/database/master/games/tebaklirik.json')
+let result = anu[Math.floor(Math.random() * anu.length)]
+mans.sendText(m.chat, `Ini Adalah Lirik Dari Lagu? : *${result.soal}*?\nWaktu : 60s`, m).then(() => {
+tebaklirik[m.sender.split('@')[0]] = result.jawaban.toLowerCase()
+})
+await sleep(60000)
+if (tebaklirik.hasOwnProperty(m.sender.split('@')[0])) {
+console.log("Jawaban: " + result.jawaban)
+mans.sendButtonText(m.chat, [{ buttonId: 'tebak lirik', buttonText: { displayText: 'Tebak Lirik' }, type: 1 }], `Waktu Habis\nJawaban:  ${tebaklirik[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`, "© MyMans APIs - X - ZackMans Official", m)
+delete tebaklirik[m.sender.split('@')[0]]
+}
+} else if (args[0] === 'lontong') {
+if (caklontong.hasOwnProperty(m.sender.split('@')[0])) return m.reply("Masih Ada Sesi Yang Belum Diselesaikan!")
+let anu = await fetchJson('https://raw.githubusercontent.com/BochilTeam/database/master/games/caklontong.json')
+let result = anu[Math.floor(Math.random() * anu.length)]
+mans.sendText(m.chat, `*Jawablah Pertanyaan Berikut :*\n${result.soal}*\nWaktu : 60s`, m).then(() => {
+caklontong[m.sender.split('@')[0]] = result.jawaban.toLowerCase()
+caklontong_desk[m.sender.split('@')[0]] = result.deskripsi
+})
+await sleep(60000)
+if (caklontong.hasOwnProperty(m.sender.split('@')[0])) {
+console.log("Jawaban: " + result.jawaban)
+mans.sendButtonText(m.chat, [{ buttonId: 'tebak lontong', buttonText: { displayText: 'Tebak Lontong' }, type: 1 }], `Waktu Habis\nJawaban:  ${caklontong[m.sender.split('@')[0]]}\nDeskripsi : ${caklontong_desk[m.sender.split('@')[0]]}\n\nIngin bermain? tekan button dibawah`, "© MyMans APIs - X - ZackMans Official", m)
+delete caklontong[m.sender.split('@')[0]]
+delete caklontong_desk[m.sender.split('@')[0]]
+}
+}
+}
+break
+case 'ttc': case 'ttt': case 'tictactoe': {
+let TicTacToe = require("./lib/tictactoe")
+this.game = this.game ? this.game : {}
+if (Object.values(this.game).find(room => room.id.startsWith('tictactoe') && [room.game.playerX, room.game.playerO].includes(m.sender))) return m.reply('Kamu masih didalam game')
+let room = Object.values(this.game).find(room => room.state === 'WAITING' && (args.join(" ") ? room.name === args.join(" ") : true))
+if (room) {
+m.reply('Partner ditemukan!')
+room.o = m.chat
+room.game.playerO = m.sender
+room.state = 'PLAYING'
+let arr = room.game.render().map(v => {
+return {
+X: '❌',
+O: '⭕',
+1: '1️⃣',
+2: '2️⃣',
+3: '3️⃣',
+4: '4️⃣',
+5: '5️⃣',
+6: '6️⃣',
+7: '7️⃣',
+8: '8️⃣',
+9: '9️⃣',
+}[v]
+})
+let str = `Room ID: ${room.id}
+
+${arr.slice(0, 3).join('')}
+${arr.slice(3, 6).join('')}
+${arr.slice(6).join('')}
+
+Menunggu @${room.game.currentTurn.split('@')[0]}
+
+Ketik *nyerah* untuk menyerah dan mengakui kekalahan`
+if (room.x !== room.o) await mans.sendText(room.x, str, m, { mentions: parseMention(str) } )
+await mans.sendText(room.o, str, m, { mentions: parseMention(str) } )
+} else {
+room = {
+id: 'tictactoe-' + (+new Date),
+x: m.chat,
+o: '',
+game: new TicTacToe(m.sender, 'o'),
+state: 'WAITING'
+}
+if (args.join(" ")) room.name = args.join(" ")
+m.reply('Menunggu partner' + (args.join(" ") ? ` mengetik command dibawah ini ${prefix}${command} ${args.join(" ")}` : ''))
+this.game[room.id] = room
+}
+}
+break
+case 'delttc': case 'delttt': {
+this.game = this.game ? this.game : {}
+try {
+if (this.game) {
+delete this.game
+mans.sendText(m.chat, `Berhasil delete session TicTacToe`, m)
+} else if (!this.game) {
+m.reply(`Session TicTacToe🎮 tidak ada`)
+} else throw '?'
+} catch (e) {
+m.reply('rusak')
+}
+}
+break
+case 'kuismath': case 'math': {
+if (kuismath.hasOwnProperty(m.sender.split('@')[0])) return m.reply("Masih Ada Sesi Yang Belum Diselesaikan!")
+let { genMath, modes } = require('./src/math')
+if (!args.join(" ")) return m.reply(`Mode: ${Object.keys(modes).join(' | ')}\nContoh penggunaan: ${prefix}math medium`)
+let result = await genMath(text.toLowerCase())
+mans.sendText(m.chat, `*Berapa hasil dari: ${result.soal.toLowerCase()}*?\n\nWaktu: ${(result.waktu / 1000).toFixed(2)} detik`, m).then(() => {
+kuismath[m.sender.split('@')[0]] = result.jawaban
+})
+await sleep(result.waktu)
+if (kuismath.hasOwnProperty(m.sender.split('@')[0])) {
+console.log("Jawaban: " + result.jawaban)
+m.reply("Waktu Habis\nJawaban: " + kuismath[m.sender.split('@')[0]])
+delete kuismath[m.sender.split('@')[0]]
+}
 }
 break
 case 'delete': case 'del': {
@@ -618,11 +1095,10 @@ m.reply('Berhasil Menghapus Sesi Vote Di Grup Ini')
 }
 break
 case 'listpc': {
-let anu = await store.chats.all().filter(v => v.id.endsWith('.net')).map(v => v.id)
-let teks = `⬣ *LIST PERSONAL CHAT*\n\nTotal Chat : ${anu.length} Chat\n\n`
+let anu = await store.chats.all().filter(v => v.id.endsWith('.net')).map(v => v)
+let teks = `     「 List Personal Chat 」\n\nThere are ${anu.length} users using bot in personal chat\n\n`
 for (let i of anu) {
- let nama = store.messages[i].array[0].pushName
- teks += `⬡ *Nama :* ${nama}\n⬡ *User :* @${i.split('@')[0]}\n⬡ *Chat :* https://wa.me/${i.split('@')[0]}\n\n────────────────────────\n\n`
+ teks += `Profile : @${i.id.split('@')[0]}\nChat : ${i.unreadCount}\nLastchat : ${moment(i.conversationTimestamp * 1000).tz("Asia/Jakarta").format("DD/MM/YYYY HH:MM:SS")}\n\n`
 }
 mans.sendTextWithMentions(m.chat, teks, m)
 }
@@ -632,7 +1108,7 @@ let anu = await store.chats.all().filter(v => v.id.endsWith('@g.us')).map(v => v
 let teks = `⬣ *LIST GROUP CHAT*\n\nTotal Group : ${anu.length} Group\n\n`
 for (let i of anu) {
  let metadata = await mans.groupMetadata(i)
- teks += `⬡ *Nama :* ${metadata.subject}\n⬡ *Owner :* @${metadata.owner.split('@')[0]}\n⬡ *ID :* ${metadata.id}\n⬡ *Dibuat :* ${moment(metadata.creation * 1000).tz('Asia/Jakarta').format('DD/MM/YYYY HH:mm:ss')}\n⬡ *Member :* ${metadata.participants.length}\n\n────────────────────────\n\n`
+ teks += `⬡ *Nama :* ${metadata.subject}\n⬡ *Owner :* @${metadata.owner.split('@')[0] ? metadata.owner.split('@')[0] : "undefined"}\n⬡ *ID :* ${metadata.id}\n⬡ *Dibuat :* ${moment(metadata.creation * 1000).tz('Asia/Jakarta').format('DD/MM/YYYY HH:mm:ss')}\n⬡ *Member :* ${metadata.participants.length}\n\n────────────────────────\n\n`
 }
 mans.sendTextWithMentions(m.chat, teks, m)
 }
@@ -2179,7 +2655,7 @@ bang = util.format(sul)
 return m.reply(bang)
 }
 try {
-m.reply(util.format(eval(`(async () => { return ${budy.slice(3)} })()`)))
+m.reply(util.format(eval(`(async () => { ${budy.slice(3)} })()`)))
 } catch (e) {
 m.reply(String(e))
 }
