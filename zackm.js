@@ -3,10 +3,12 @@
  - Contact Me on https://wa.me/+6281385062956
  - Follow iG : @salman_alfarizi_15
  - Thanks Dika Ardnt
+ tes
 */
 
 require("./config")
 const { BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, proto, generateWAMessageContent, generateWAMessage, prepareWAMessageMedia, areJidsSameUser, getContentType, WAFlag } = require('@adiwajshing/baileys')
+const zmans = require("@adiwajshing/baileys")
 const fs = require('fs')
 const util = require('util')
 const chalk = require('chalk')
@@ -19,6 +21,7 @@ const { JSDOM } = require('jsdom')
 const speed = require('performance-now')
 const hx = require("hxz-api")
 const yogipw = require("tod-api")
+const thiccysapi = require('textmaker-thiccy')
 const toHur = require('@develoka/angka-terbilang-js')
 const mathjs = require('mathjs')
 const { performance } = require('perf_hooks')
@@ -28,6 +31,7 @@ const imgbbUploader = require('imgbb-uploader')
 const primbon = new Primbon()
 const emoji = new EmojiAPI()
 const { smsg, formatp, tanggal, formatDate, getTime, isUrl, sleep, clockString, runtime, fetchJson, getBuffer, jsonformat, format, parseMention, getRandom } = require('./lib/myfunc')
+const { aiovideodl } = require('./lib/scraper.js')
 
 // Read Database
 global.db = JSON.parse(fs.readFileSync('./src/database.json'))
@@ -511,10 +515,171 @@ type: 'append'
 mans.ev.emit('messages.upsert', msg)
 }
 
+// Fake Reply
+//FAKEREPLY PRODUCT
+const ftoko = {
+key: {
+fromMe: false,
+participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "16505434800@s.whatsapp.net" } : {})
+},
+message: {
+"productMessage": {
+"product": {
+"productImage":{
+"mimetype": "image/jpeg",
+"jpegThumbnail": log0 //Gambarnye
+},
+"title": "MyMans APIs", //Kasih namalu 
+"description": "SELF BOT", 
+"currencyCode": "USD",
+"priceAmount1000": "2000",
+"retailerId": "MyMans",
+"productImageCount": 1
+},
+"businessOwnerJid": `0@s.whatsapp.net`
+}
+}
+}
+//FAKEREPLY TROLI
+const ftroli = {
+key : {
+participant : '0@s.whatsapp.net'
+},
+message: {
+orderMessage: {
+itemCount : 1,
+status: 1,
+surface : 1,
+message: 'MyMans', //Kasih namalu
+orderTitle: 'Bang',
+thumbnail: log0, //Gambarnye
+sellerJid: '0@s.whatsapp.net'
+
+}
+}
+}
+//FAKEREPLY LOCATION
+const flokasi = {
+key : {
+ participant : '0@s.whatsapp.net'
+},
+message: {
+locationMessage: {
+name: 'Russia',
+jpegThumbnail: log0
+}
+}
+}
+//FAKEREPLY DOCUMENT
+const fdocs = {
+key : {
+ participant : '0@s.whatsapp.net'
+},
+message: {
+documentMessage: {
+title: 'Halo bang', 
+jpegThumbnail: log0
+}
+}
+}
+//FAKEREPLY VIDEO
+const fvideo = {
+key: { 
+fromMe: false,
+participant: `0@s.whatsapp.net`, ...(from ? 
+{ remoteJid: "6289643739077-1613049930@g.us" } : {}) 
+},
+message: { 
+"videoMessage": { 
+"title":"hallo bang",
+"h": `Hmm`,
+'seconds': '30', 
+'caption': 'Halo bang',
+'jpegThumbnail': log0
+}
+}
+}
+//FAKEREPLY GROUPINVITE
+const fgclink = {
+"key": {
+"fromMe": false,
+"participant": "0@s.whatsapp.net",
+"remoteJid": "0@s.whatsapp.net"
+},
+"message": {
+"groupInviteMessage": {
+"groupJid": "6288213840883-1616169743@g.us",
+"inviteCode": "mememteeeekkeke",
+"groupName": "P", 
+"caption": "Halo bang jagoo", 
+'jpegThumbnail': log0
+}
+}
+}
+//FAKEREPLY GIF
+const fgif = {
+key: { 
+fromMe: false,
+participant: `0@s.whatsapp.net`, ...(from ? 
+{ remoteJid: "6289643739077-1613049930@g.us" } : {}) 
+},
+message: { 
+ "videoMessage": { 
+ "title":"ZackMans Official",
+ "h": `Hmm`,
+ 'seconds': "30", 
+ 'gifPlayback': 'true', 
+ 'caption': 'ZackMans Official',
+ 'jpegThumbnail': log0
+}
+}
+} 
+//FAKEREPLY TEXT WITH THUMBNAIL
+const ftextt = {
+key: { 
+fromMe: false,
+participant: `0@s.whatsapp.net`, ...(from ? 
+{ remoteJid: "6289643739077-1613049930@g.us" } : {}) 
+},
+message: { 
+"extendedTextMessage": {
+ "text":"hallo bang",
+"title": `Hmm`,
+ 'jpegThumbnail': log0
+}
+} 
+}
+//FAKEREPLY VN
+const fvn = {
+key: { 
+fromMe: false,
+participant: `62882000383955@s.whatsapp.net`, ...(from ? 
+{ remoteJid: "6289643739077-1613049930@g.us" } : {}) 
+},
+message: { 
+"audioMessage": {
+"mimetype":"audio/ogg; codecs=opus",
+"seconds": "30",
+"ptt": "true"
+}
+} 
+}
+
+// Jangan diapa apain om
+const zckmn = await fetchJson("https://ZackMans.github.io/database/zackbotmans.json")
+const ceknyai = "101"
+if (zckmn.update === ceknyai) {
+cekbotinfo = "Anda menggunakan zackbotmans versi terbaru, belum ada update dari owner"
+} else {
+cekbotinfo = "Anda menggunakan zackbotmans versi lama, owner telah mengupdate zackbotmans ketik cekupdate untuk melihat versi terbaru"
+}
+
+// Terserah anda
 const listmn = `*ROBOT WHATSAPP MULTI DEVICE*
 _Script By MyMans APIs - X - ZackMans Official_
 
 Library : Baileys - Multi Device
+InfoBot : ${cekbotinfo}
 
 PROFILE BOT :
 -> Owner : ${owner.length}
@@ -552,7 +717,10 @@ editinfo <open/close>
 ▸ DOWNLOADER
 instagram <query>
 tiktok <query>
+twitter <query>
+facebook <query>
 youtube <query>
+igstory <query>
 jpeg <query>
 mp4 <query>
 
@@ -570,6 +738,7 @@ pinterest <query>
 ▸ CONVERT
 sticker <image/video>
 smeme <image>
+stickerwm <reply>
 emoji <query>
 tomp3 <video>
 tovn <video>
@@ -607,6 +776,9 @@ tebak <query>
 family100 <undefined>
 suitpvp <query>
 
+▸ MAKER MENU
+textmaker <option>
+
 ▸ DATABASE
 setcmd <query>
 listcmd <undefined>
@@ -626,6 +798,7 @@ sc <undefined>
 ping <undefined>
 afk <query>
 cekupdate [UpdateBot]
+getscmd [GetSticker]
 delete <query>
 infochat <query>
 request <query>
@@ -645,7 +818,7 @@ cowner <add/del>
 > / => / $
 
 THANKS TO :
-adiwajshing, MhankBarBar, Nurutomo, MyMans APIs - X - ZackMans Official, Dika Ardnt, Ariffb, BochilGaming, Heroku, Replit, Railway, Termux, Rest APIs, Penyedia Module, Mastah Lainya
+adiwajshing, MhankBarBar, Nurutomo, MyMans APIs - X - ZackMans Official, Dika Ardnt, Hexagonz, Ariffb, BochilGaming, Heroku, Replit, Railway, Termux, Rest APIs, Penyedia Module, Mastah Lainya
 
 ${ucapanWaktu}
 ${jangwak}`
@@ -692,6 +865,29 @@ id: 'sc'
 }
 }), { userJid: m.chat, quoted: m })
 mans.relayMessage(m.chat, template.message, { messageId: template.key.id })
+}
+break
+case 'getscmd': {
+if (isBan) return m.reply(mess.ban)
+mans.sendMessage(from, {sticker:{url:"https://ZackMans.github.io/media/menu.webp"}}, {quoted:m})
+mans.sendMessage(from, {sticker:{url:"https://ZackMans.github.io/media/groupopen.webp"}}, {quoted:m})
+mans.sendMessage(from, {sticker:{url:"https://ZackMans.github.io/media/groupclose.webp"}}, {quoted:m})
+}
+break
+case 'textmaker': {
+if (isBan) return m.reply(mess.ban)
+if (args.length < 1) return m.reply(`Example :\n${prefix + command} <name>`)
+if (args[0] === 'glitch') {
+if (args.length < 2) return m.reply(`Example :\n${prefix + command + ' ' + args[0]} ZackMans`)
+let teds = await thiccysapi.textpro("https://textpro.me/create-impressive-glitch-text-effects-online-1027.html", [args[1]])
+mans.sendMessage(from, {image:{url:teds}, caption:"Done!"}, {quoted:m})
+} else if (args[0] === 'glow') {
+if (args.length < 2) return m.reply(`Example :\n${prefix + command + ' ' + args[0]} ZackMans`)
+let teds = await thiccysapi.textpro("https://textpro.me/create-light-glow-sliced-text-effect-online-1068.html", [args[1]])
+mans.sendMessage(from, {image:{url:teds}, caption:"Done!"}, {quoted:m})
+} else {
+m.reply(`*List Text Maker :*\n•> glitch\n•> glow`)
+}
 }
 break
 case 'emoji': {
@@ -1114,7 +1310,7 @@ if (isBan) return m.reply(mess.ban)
 let anu = await store.chats.all().filter(v => v.id.endsWith('.net')).map(v => v)
 let teks = `     「 List Personal Chat 」\n\nThere are ${anu.length} users using bot in personal chat`
 for (let i of anu) {
- teks += `\n\nProfile : @${i.id.split('@')[0]}\nChat : ${i.unreadCount}\nLastchat : ${moment(i.conversationTimestamp * 1000).tz("Asia/Jakarta").format("DD/MM/YYYY HH:MM:SS")}`
+ teks += `\n\nProfile : @${i.id.split('@')[0]}\nChat : ${i.unreadCount}\nLastchat : ${moment(i.conversationTimestamp * 1000).tz("Asia/Jakarta").format("DD/MM/YYYY HH:mm:ss")}`
 }
 mans.sendTextWithMentions(m.chat, teks, m)
 }
@@ -1846,7 +2042,6 @@ m.reply('Sukses Broadcast')
 }
 break
 case 'sc': case 'script': case 'donate': case 'donasi': case 'cekupdate': case 'updatebot': case 'cekbot': case 'sourcecode': {
-let zckmn = await fetchJson("https://ZackMans.github.io/database/zackbotmans.json")
 teks = `     「 ZackMans Official 」\n\n${zckmn.saweria}\n${zckmn.donate}`
 for (let i of zckmn.source) {
 teks += `\n\nName : ${i.name}\n${i.link}`
@@ -1892,12 +2087,12 @@ tekse = `     「 Group Link Inspector 」
 ▸ ID : ${res.content[0].attrs.id ? res.content[0].attrs.id : "undefined"}
 ▸ Subject : ${res.content[0].attrs.subject ? res.content[0].attrs.subject : "undefined"}
 ▸ Subject update by : ${res.content[0].attrs.s_o.split("@")[0] ? "@" + res.content[0].attrs.s_o.split("@")[0] : "undefined"}
-▸ Subject update at : ${res.content[0].attrs.s_t ? moment(res.content[0].attrs.s_t *1000).tz("Asia/Jakarta").format("DD-MM-YYYY, HH:MM:SS") : "undefined"}
+▸ Subject update at : ${res.content[0].attrs.s_t ? moment(res.content[0].attrs.s_t *1000).tz("Asia/Jakarta").format("DD-MM-YYYY, HH:mm:ss") : "undefined"}
 ▸ Create by : ${res.content[0].attrs.creator ? "@" + res.content[0].attrs.creator.split("@")[0] : "undefined"}
-▸ Create at : ${res.content[0].attrs.creation ? moment(res.content[0].attrs.creation * 1000).tz("Asia/Jakarta").format("DD-MM-YYYY, HH:MM:SS") : "undefined"}
+▸ Create at : ${res.content[0].attrs.creation ? moment(res.content[0].attrs.creation * 1000).tz("Asia/Jakarta").format("DD-MM-YYYY, HH:mm:ss") : "undefined"}
 ▸ Total Members : ${res.content[0].attrs.size ? res.content[0].attrs.size : "undefined"} Members
 ▸ Desc update by : ${res.content[0].content[0].attrs.participant ? "@" + res.content[0].content[0].attrs.participant.split("@")[0] : "undefined"}
-▸ Desc update at : ${res.content[0].content[0].attrs.t ? moment(res.content[0].content[0].attrs.t * 1000).tz("Asia/Jakarta").format("DD-MM-YYYY, HH:MM:SS") : "undefined"}
+▸ Desc update at : ${res.content[0].content[0].attrs.t ? moment(res.content[0].content[0].attrs.t * 1000).tz("Asia/Jakarta").format("DD-MM-YYYY, HH:mm:ss") : "undefined"}
 ▸ Desc id : ${res.content[0].content[0].attrs.id ? res.content[0].content[0].attrs.id : "undefined"}
 ▸ Description : ${res.content[0].content[0].content[0].content ? res.content[0].content[0].content[0].content.toString() : "No Description"}
 `
@@ -2397,51 +2592,83 @@ m.reply("Error")
 break
 case 'igstory': case 'instagramstory': {
 if (isBan) return m.reply(mess.ban)
-if (!args[0]) return m.reply("Usernamenya mana kak?")
+if (!args[0]) return m.reply(`Example :\n${prefix + command} salman_alfarizi_15`)
 try {
-hx.igstory(args[0]).then(async(res) => {
-textbv = `*| INSTAGRAM DOWNLOADER |*\n\n⭔ Username : ${res.user.username}\n⭔ Followers : ${res.user.followers}`
+hx.igstory(args[0]).then(async(resed) => {
+ini_anu = []
+anu_list = []
+textbv = `*| INSTAGRAM STORY |*\n\n⭔ Username : ${resed.user.username ? resed.user.name : "undefined"}\n⭔ Followers : ${resed.user.followers}`
 urut = 1
-for (let i = 0; i < res.medias.length; i++) {
-textbv += `\n\nMedia File ${urut++}\nType: ${res.medias[i].type}/${res.medias[i].fileType}\nUrl: ${res.medias[i].url}`
+for (let i = 0; i < resed.medias.length; i++) {
+ini_anu.push({
+ "type": resed.medias[i].fileType,
+ "url": resed.medias[i].url
+})
 }
-textbv += `\n\n_Ketik mp4/jpeg (Linknya), salin linknya_`
-mans.sendMessage(from, {image:log0, caption:textbv, contextInfo:{externalAdReply:{
-title:"NOMOR BOT WHATSAPP, MULTI DEVICE TERBARU FITUR BERJIBUN - ZackMans",
-body:"© MyMans APIs - X - ZackMans Official",
-thumbnail: log0,
-mediaType:2,
-mediaUrl: "https://youtu.be/jKAawPBWe5k",
-sourceUrl: "https://youtu.be/jKAawPBWe5k"
-}}}, {quoted:m})
-}).catch(_ => _)
-} catch {
-m.reply("error!")
+ilod = 1
+for (let i of ini_anu) {
+anu_list.push({buttonId: `ig ${i.type} ${i.url}`, buttonText: {displayText: `Media ${ilod++}`}, type: 1})
+}
+textbv += `\n\n_Pilih media dibawah untuk mendownload_`
+let buttons = anu_list
+let buttonMessage = {
+image:log0,
+jpegThumbnail:thum,
+caption: textbv,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4
+}
+mans.sendMessage(from, buttonMessage, {quoted:m})
+})
+} catch (err) {
+m.reply(String(err))
 }
 }
 break
 case 'igdl': case 'instagram': {
 if (isBan) return m.reply(mess.ban)
-if (!args[0]) return m.reply(mess.linkm)
+if (!args[0]) return m.reply(`Example :\n${prefix + command} https://www.instagram.com/p/CcvJGuxh9VI/?igshid=YmMyMTA2M2Y=`)
 try {
-hx.igdl(args[0]).then(async(res) => {
-textbv = `*| INSTAGRAM DOWNLOADER |*\n\n⭔ Username : ${res.user.username}\n⭔ Followers : ${res.user.followers}`
+hx.igdl(args[0]).then(async(resed) => {
+ini_anu = []
+anu_list = []
+textbv = `*| INSTAGRAM DOWNLOADER |*\n\n⭔ Username : ${resed.user.username ? resed.user.name : "undefined"}\n⭔ Followers : ${resed.user.followers}`
 urut = 1
-for (let i = 0; i < res.medias.length; i++) {
-textbv += `\n\nMedia File ${urut++}\nType: ${res.medias[i].type}/${res.medias[i].fileType}\nUrl: ${res.medias[i].url}`
+for (let i = 0; i < resed.medias.length; i++) {
+ini_anu.push({
+ "type": resed.medias[i].fileType,
+ "url": resed.medias[i].url
+})
 }
-textbv += `\n\n_Ketik mp4/jpeg (Linknya), salin linknya_`
-mans.sendMessage(from, {image:log0, caption:textbv, contextInfo:{externalAdReply:{
-title:"NOMOR BOT WHATSAPP, MULTI DEVICE TERBARU FITUR BERJIBUN - ZackMans",
-body:"© MyMans APIs - X - ZackMans Official",
-thumbnail: log0,
-mediaType:2,
-mediaUrl: "https://youtu.be/jKAawPBWe5k",
-sourceUrl: "https://youtu.be/jKAawPBWe5k"
-}}}, {quoted:m})
-}).catch(_ => _)
-} catch {
-m.reply("Link error!")
+ilod = 1
+for (let i of ini_anu) {
+anu_list.push({buttonId: `ig ${i.type} ${i.url}`, buttonText: {displayText: `Media ${ilod++}`}, type: 1})
+}
+textbv += `\n\n_Pilih media dibawah untuk mendownload_`
+let buttons = anu_list
+let buttonMessage = {
+image:log0,
+jpegThumbnail:thum,
+caption: textbv,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4
+}
+mans.sendMessage(from, buttonMessage, {quoted:m})
+})
+} catch (err) {
+m.reply(String(err))
+}
+}
+break
+case 'ig': {
+if (args[0] === "mp4") {
+mans.sendMessage(from, {video:{url:args[1]}, caption:'Done!', mimetype:'video/mp4'}, {quoted:m})
+} else if (args[0] === "jpg") {
+mans.sendMessage(from, {image:{url:args[1]}, caption:'Done!'}, {quoted:m})
+} else {
+m.reply(" Error! ")
 }
 }
 break
@@ -2479,62 +2706,205 @@ m.reply("Linknya Error")
 }
 }
 break
+case 'twitter': case 'twdl': case 'twmp4': {
+if (isBan) return m.reply(mess.ban)
+if (!args[0]) return m.reply(`Example :\n${prefix + command} https://twitter.com/cinema21/status/1517754155644821504?t=rUnbyqwh4vAE1QXMXlsVeQ&s=19`)
+try {
+let lotwit = await aiovideodl(args[0])
+teks = `*| TWITTER DOWNLOADER |*
+
+Caption : ${lotwit.title ? lotwit.title : "undefined"}
+Type : ${lotwit.medias[1].extension}
+Size : ${lotwit.medias[1].formattedSize}
+Link : ${lotwit.medias[1].url}
+
+_Pilih kualitas video dibawah dengan cara mengklik tombolnya_`
+let buttons = [
+{buttonId: `twddl ${lotwit.medias[0].url}`, buttonText: {displayText: `Quality ${lotwit.medias[0].quality}`}, type: 1},
+{buttonId: `twddl ${lotwit.medias[2].url}`, buttonText: {displayText: `Quality ${lotwit.medias[2].quality}`}, type: 1}
+]
+let buttonMessage = {
+video: {url:lotwit.medias[1].url},
+caption: teks,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4,
+contextInfo:{externalAdReply:{
+title:"ZackMans Official - Twitter Downloader",
+body:lotwit.title ? lotwit.title : "Twitter Downloader",
+thumbnail: log0,
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
+}}
+}
+mans.sendMessage(from, buttonMessage, {quoted:m})
+} catch {
+m.reply(" Link Error!")
+}
+}
+break
+case 'twddl': {
+if (isBan) return m.reply(mess.ban)
+let buttons = [
+{buttonId: `menu`, buttonText: {displayText: 'Menu'}, type: 1}
+]
+let buttonMessage = {
+video: {url:args[0]},
+caption: "Done!",
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4,
+contextInfo:{externalAdReply:{
+title:"ZackMans Official - Twitter Downloader",
+body: "Twitter Downloader",
+thumbnail: log0,
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
+}}
+}
+mans.sendMessage(from, buttonMessage, {quoted:m})
+}
+break
+case 'facebook': case 'fbdl': case 'fbmp4': case 'fb': {
+if (isBan) return m.reply(mess.ban)
+if (!args[0]) return m.reply(`Example :\n${prefix + command} https://fb.watch/cAX2dep-BZ/`)
+try {
+let resd = await aiovideodl(args[0])
+teks = `*| FACEBOOK DOWNLOADER |*
+
+Type : video/${resd.medias[0].extension}
+Quality : ${resd.medias[0].quality}
+Size : ${resd.medias[0].formattedSize}
+
+_Untuk kualitas hd anda bisa klik tombol dibawah_`
+let buttons = [
+{buttonId: `fbddl ${resd.medias[1].url}`, buttonText: {displayText: 'QualityHD'}, type: 1}
+]
+let buttonMessage = {
+video: {url:resd.medias[0].url},
+caption: teks,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4,
+contextInfo:{externalAdReply:{
+title:"ZackMans Official - Facebook Downloader",
+body:"facebook downloader",
+thumbnail: log0,
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
+}}
+}
+mans.sendMessage(from, buttonMessage, {quoted:m})
+} catch {
+m.reply("Link invalid!")
+}
+}
+break
+case 'fbddl': {
+if (isBan) return m.reply(mess.ban)
+let buttons = [
+{buttonId: `menu`, buttonText: {displayText: 'Menu'}, type: 1}
+]
+let buttonMessage = {
+video: {url:args[0]},
+caption: "Done!",
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4,
+contextInfo:{externalAdReply:{
+title:"ZackMans Official - Facebook Downloader",
+body: " Facebook Downloader",
+thumbnail: log0,
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
+}}
+}
+mans.sendMessage(from, buttonMessage, {quoted:m})
+}
+break
 case 'ttdl': case 'tiktok': case 'ttmp4': case 'ttmp3': case 'tiktoknowm': {
 if (isBan) return m.reply(mess.ban)
-if (!args[0]) return m.reply(mess.linkm)
-try {
-hx.ttdownloader(args[0]).then(async(res) => {
+if (!isUrl(args[0])) return m.reply(`Example :\n${prefix + command} <url>\nUses :\n${prefix + command} https://vt.tiktok.com/ZSdDo97dC/`)
+let res = await aiovideodl(args[0])
+if (isUrl(args[0])) {
 texttk = `*| TIKTOK DOWNLOADER |*
+
+Caption : ${res.title}
+Size : ${res.medias[1].formattedSize}
+Type : ${res.medias[1].extension ? "video/" + res.medias[1].extension : "undefined"}
 
 _Pilih watermak atau audio dan tunggu beberapa saat_`
 let buttons = [
-{buttonId: `ttvd ${res.wm}`, buttonText: {displayText: '× Watermak'}, type: 1},
-{buttonId: `ttad ${res.nowm}`, buttonText: {displayText: '♫ Audio'}, type: 1}
+{buttonId: `ttvd ${args[0]}}`, buttonText: {displayText: '× Watermak'}, type: 1},
+{buttonId: `ttad ${args[0]}`, buttonText: {displayText: '♫ Audio'}, type: 1}
 ]
 let buttonMessage = {
-video: {url:res.nowm},
+video: {url:res.medias[1].url},
 caption: texttk,
 footer: "© MyMans APIs - MyMainas",
 buttons: buttons,
 headerType: 4,
 contextInfo:{externalAdReply:{
-title:"NOMOR BOT WHATSAPP, MULTI DEVICE TERBARU FITUR BERJIBUN - ZackMans",
-body:"© MyMans APIs - X - ZackMans Official",
+title:"ZackMans Official - Tiktok Downloader",
+body:res.title,
 thumbnail: log0,
-mediaType:2,
-mediaUrl: "https://youtu.be/jKAawPBWe5k",
-sourceUrl: "https://youtu.be/jKAawPBWe5k"
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
 }}
 }
 mans.sendMessage(from, buttonMessage, {quoted:m})
-}).catch(_ => _)
-} catch {
-m.reply("Link error!")
+} else {
+m.reply("Link Error!")
 }
-}
-break
-case 'ttvd': {
-if (isBan) return m.reply(mess.ban)
-mans.sendMessage(from, {video:{url:args[0]}, mimetype:" video/mp4", caption:"Succes", contextInfo:{externalAdReply:{
-title:"NOMOR BOT WHATSAPP, MULTI DEVICE TERBARU FITUR BERJIBUN - ZackMans",
-body:"© MyMans APIs - X - ZackMans Official",
-thumbnail: log0,
-mediaType:2,
-mediaUrl: "https://youtu.be/jKAawPBWe5k",
-sourceUrl: "https://youtu.be/jKAawPBWe5k"
-}}}, {quoted:m})
 }
 break
 case 'ttad': {
 if (isBan) return m.reply(mess.ban)
-mans.sendMessage(from, {audio:{url:args[0]}, mimetype:"audio/mp4", ptt:true, contextInfo:{externalAdReply:{
-title:"NOMOR BOT WHATSAPP, MULTI DEVICE TERBARU FITUR BERJIBUN - ZackMans",
-body:"© MyMans APIs - X - ZackMans Official",
-thumbnail:log0,
-mediaType:2,
-mediaUrl: "https://youtu.be/jKAawPBWe5k",
-sourceUrl: "https://youtu.be/jKAawPBWe5k"
+let res = await aiovideodl(args[0])
+mans.sendMessage(from, {audio:{url:res.medias[2].url}, mimetype:"audio/mp4", ptt:true, contextInfo:{externalAdReply:{
+title:"ZackMans Official - Tiktok Downloader",
+body:res.title,
+thumbnail: log0,
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
 }}}, {quoted:m})
+}
+break
+case 'ttvd': {
+if (isBan) return m.reply(mess.ban)
+let res = await aiovideodl(args[0])
+texttk = `*| TIKTOK DOWNLOADER |*
+
+Caption : ${res.title}
+Size : ${res.medias[0].formattedSize}
+Type : ${res.medias[0].extension ? "video/" + res.medias[0].extension : "undefined"}
+
+_untuk melihat list menu pencet tombol dibawah atau ketik menu_`
+let buttons = [
+{buttonId: `menu`, buttonText: {displayText: 'Menu'}, type: 1}
+]
+let buttonMessage = {
+video: {url:res.medias[0].url},
+caption: texttk,
+footer: "© MyMans APIs - MyMainas",
+buttons: buttons,
+headerType: 4,
+contextInfo:{externalAdReply:{
+title:"ZackMans Official - Tiktok Downloader",
+body:res.title,
+thumbnail: log0,
+mediaType:1,
+mediaUrl: args[0],
+sourceUrl: args[0]
+}}
+}
+mans.sendMessage(from, buttonMessage, {quoted:m})
 }
 break
 case 'play': case 'ytplay': {
@@ -2542,8 +2912,10 @@ if (isBan) return m.reply(mess.ban)
 let yts = require("yt-search")
 let search = await yts(text)
 let anu = search.videos[Math.floor(Math.random() * search.videos.length)]
+let ytvc = await hx.youtube(anu.url)
 let buttons = [
-{buttonId: `ytdl ${anu.url}`, buttonText: {displayText: 'Download'}, type: 1}
+{buttonId: `ytvd ${ytvc.link}`, buttonText: {displayText: '► Video'}, type: 1},
+{buttonId: `ytad ${ytvc.mp3}`, buttonText: {displayText: '♫ Audio'}, type: 1}
 ]
 let buttonMessage = {
 image: { url: anu.thumbnail },
@@ -2636,6 +3008,29 @@ sourceUrl: "https://youtu.be/jKAawPBWe5k"
 }}}, {quoted:m})
 }
 break
+case 'swm': case 'stickerwm': {
+if (isBan) return m.reply(mess.ban)
+if (!args.join(" ")) return m.reply(`Example :\nswm MyMans APIs | MyMainas`)
+const swn = args.join(" ")
+const pcknm = swn.split("|")[0];
+const atnm = swn.split("|")[1];
+if (m.quoted.isAnimated === true) {
+mans.downloadAndSaveMediaMessage(quoted, "gifee")
+mans.sendMessage(from, {sticker:fs.readFileSync("gifee.webp")},{quoted:m})
+} else if (/image/.test(mime)) {
+let media = await quoted.download()
+let encmedia = await mans.sendImageAsSticker(m.chat, media, m, { packname: pcknm, author: atnm })
+await fs.unlinkSync(encmedia)
+} else if (/video/.test(mime)) {
+if ((quoted.msg || quoted).seconds > 11) return m.reply('Maksimal 10 detik!')
+let media = await quoted.download()
+let encmedia = await mans.sendVideoAsSticker(m.chat, media, m, { packname: pcknm, author: atnm })
+await fs.unlinkSync(encmedia)
+} else {
+m.reply(`Kirim Gambar/Video Dengan Caption ${prefix + command}\nDurasi Video 1-9 Detik`)
+}
+}
+break
 case 'smeme': case 'smm': {
 if (isBan) return m.reply(mess.ban)
 if (!args.join(" ")) return m.reply("Masukan Textnya!")
@@ -2687,7 +3082,7 @@ return m.reply(bang)
 try {
 m.reply(util.format(eval(`(async () => { ${budy.slice(3)} })()`)))
 } catch (e) {
-m.reply(String(e))
+mans.sendMessage(from, {image:err4r, caption:String(e)}, {quoted:m})
 }
 }
 if (budy.startsWith('>')) {
@@ -2697,14 +3092,14 @@ let evaled = await eval(budy.slice(2))
 if (typeof evaled !== 'string') evaled = require('util').inspect(evaled)
 await m.reply(evaled)
 } catch (err) {
-await m.reply(String(err))
+await mans.sendMessage(from, {image:err4r, caption:String(err)}, {quoted:m})
 }
 }
 
 if (budy.startsWith('$')) {
 if (!isCreator) return m.reply(mess.owner)
 exec(budy.slice(2), (err, stdout) => {
-if(err) return m.reply(err)
+if(err) return mans.sendMessage(from, {image:err4r, caption:String(err)}, {quoted:m})
 if (stdout) return m.reply(stdout)
 })
 }

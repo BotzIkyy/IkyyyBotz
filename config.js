@@ -10,9 +10,10 @@ const chalk = require("chalk")
 // Other
 global.thum = fs.readFileSync("./media/image/thumb.jpg")
 global.log0 = fs.readFileSync("./media/image/mans.jpg")
+global.err4r = fs.readFileSync("./media/image/error.jpg")
 global.owner = ['62882000383955','6281385062956']
 global.rkyt = []
-global.banUser = []
+global.banUser = ['6281366679021@s.whatsapp.net']
 global.ntilink = ['120363043965529911@g.us','120363022988111568@g.us']
 global.wlcm = ['120363043965529911@g.us','120363023112413670@g.us','19054091487-1424650263@g.us','120363022988111568@g.us']
 global.gcrevoke = ['19054091487-1424650263@g.us']
