@@ -19,7 +19,8 @@ const PhoneNumber = require('awesome-phonenumber')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetchJson, await, sleep } = require('./lib/myfunc')
 
-require("http").createServer((_, res) => res.end("Hallo World!")).listen(8080)
+// Buat Replit Nix
+// require("http").createServer((_, res) => res.end("Hallo World!")).listen(8080)
 
 const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
 
@@ -49,7 +50,6 @@ require("./zackm")(mans, m, chatUpdate, store)
 console.log(err)
 }
 })
-
 mans.ev.on('group-participants.update', async (anu) => {
         console.log(anu)
         try {

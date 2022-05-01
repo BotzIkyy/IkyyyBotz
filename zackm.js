@@ -2,8 +2,7 @@
  - Create By ZackMans Official
  - Contact Me on https://wa.me/+6281385062956
  - Follow iG : @salman_alfarizi_15
- - Thanks Dika Ardnt
- tes
+ - Thanks Dika Ardnt t
 */
 
 require("./config")
@@ -221,6 +220,7 @@ sendOrder(m.chat, teks, "391028153034238", fs.readFileSync('./media/image/mans.j
 
 // AntiLink
 if (AntiLink) {
+if (!isBotAdmins) return
 linkgce = await mans.groupInviteCode(from)
 if (budy.includes(`https://chat.whatsapp.com/${linkgce}`)) {
 m.reply(`\`\`\`「 Detect Link 」\`\`\`\n\nAnda tidak akan dikick bot karena yang anda kirim adalah link group yg ada di group ini`)
@@ -3082,7 +3082,7 @@ return m.reply(bang)
 try {
 m.reply(util.format(eval(`(async () => { ${budy.slice(3)} })()`)))
 } catch (e) {
-mans.sendMessage(from, {image:err4r, caption:String(e)}, {quoted:m})
+m.reply(String(e))
 }
 }
 if (budy.startsWith('>')) {
@@ -3092,7 +3092,7 @@ let evaled = await eval(budy.slice(2))
 if (typeof evaled !== 'string') evaled = require('util').inspect(evaled)
 await m.reply(evaled)
 } catch (err) {
-await mans.sendMessage(from, {image:err4r, caption:String(err)}, {quoted:m})
+m.reply(String(err))
 }
 }
 
